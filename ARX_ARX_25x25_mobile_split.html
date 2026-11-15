@@ -260,17 +260,11 @@ function build(){
   altar.rotation.x=-Math.PI/2;altar.position.set(mx,groundAtCell(mid,mid)+.045,mz);tiles.add(altar);
 }
 function buildLandscape(){
- const random=rng(S.seed+563),d=new THREE.Object3D();
- const crops=new THREE.InstancedMesh(new THREE.ConeGeometry(.08,.48,4),new THREE.MeshStandardMaterial({color:0xc6ad61,roughness:1}),2400);
- let count=0;
+ const d=new THREE.Object3D();
  for(const side of [-1,1])for(let field=0;field<4;field++){
   const x=side*(N/2+9+field*9),z=(field-1.5)*12;
   const soil=new THREE.Mesh(new THREE.PlaneGeometry(7,10),new THREE.MeshStandardMaterial({color:field%2?0x657843:0x74603c,roughness:1}));soil.rotation.x=-Math.PI/2;soil.position.set(x,.07,z);tiles.add(soil);
-  for(let row=0;row<10;row++)for(let col=0;col<30;col++){
-   const px=x-3+row*.65,pz=z-4.6+col*.31;d.position.set(px,terrainHeight(px,pz)+.3,pz);d.scale.setScalar(.7+random()*.6);d.rotation.set(0,random()*6,.08);d.updateMatrix();crops.setMatrixAt(count++,d.matrix);
-  }
  }
- crops.count=count;tiles.add(crops);
  const posts=new THREE.InstancedMesh(new THREE.CylinderGeometry(.06,.08,.65,6),mt(0x967653),4*(Math.ceil(N/3)+1));let n=0;
  for(let i=-N/2;i<=N/2;i+=3)for(const [x,z] of [[i,-N/2],[i,N/2],[-N/2,i],[N/2,i]]){d.position.set(x,terrainHeight(x,z)+.325,z);d.rotation.set(0,0,0);d.scale.setScalar(1);d.updateMatrix();posts.setMatrixAt(n++,d.matrix)}posts.count=n;tiles.add(posts);
 }
