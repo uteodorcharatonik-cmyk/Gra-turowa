@@ -55,3 +55,9 @@ npm test
 ```
 
 Build tworzy `.wasm` i aktualizuje osadzoną kopię w HTML. Moduł nie wymaga importów hosta. Eksportuje pamięć, `terrain_height(x, z, mapSize)` oraz `terrain_grid(mapSize, groundSize, segments)` zwracające wskaźnik do siatki `Float64Array` o `(segments + 1)²` elementach (1–256 segmentów). Siatka używa stałego bufora; kolejne wywołanie nadpisuje poprzedni wynik. Testy porównują każdy wierzchołek dla wszystkich rozmiarów mapy z wersją JavaScript.
+
+## Optymalizacja renderowania
+
+Gra zachowuje modele między akcjami, grupuje zasoby w instancje, upraszcza odległe drzewa i buforuje cienie. Rozdzielczość dostosowuje się do liczby widoków i dłuższych spadków płynności. Wyniki porównania i sposób uruchomienia testów przeglądarkowych: [docs/performance.md](docs/performance.md).
+
+Optymalizacja dotyczy źródłowej gry HTML. Paczki w `pobierz/` wymagają osobnego przebudowania, aby zawierały tę wersję.
