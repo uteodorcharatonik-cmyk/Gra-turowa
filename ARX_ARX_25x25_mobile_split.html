@@ -253,20 +253,6 @@ function build(){
  });
  gridTiles.instanceMatrix.needsUpdate=true;if(gridTiles.instanceColor)gridTiles.instanceColor.needsUpdate=true;
  gridTiles.receiveShadow=true;gridTiles.castShadow=false;tiles.add(gridTiles);
-  // Decorative meadows and forests outside playable bounds.
-  const rOuter=rng((S?.seed||31)+90210),dummyOuter=new THREE.Object3D();
-  const outerForest=new THREE.InstancedMesh(new THREE.ConeGeometry(.55,2.1,7),new THREE.MeshLambertMaterial({color:0x366c35}),220);
-  const outerTrunks=new THREE.InstancedMesh(new THREE.CylinderGeometry(.09,.13,.8,6),new THREE.MeshLambertMaterial({color:0x60432a}),220);
-  let outerCount=0;
-  for(let j=0;j<950&&outerCount<220;j++){
-    const xx=(rOuter()-.5)*(N+110),zz=(rOuter()-.5)*(N+110);
-    if(Math.abs(xx)<N/2+2&&Math.abs(zz)<N/2+2)continue;
-    const scale=.55+rOuter()*.85,base=terrainHeight(xx,zz);
-    dummyOuter.rotation.set(0,rOuter()*Math.PI*2,0);dummyOuter.scale.setScalar(scale);
-    dummyOuter.position.set(xx,base+1.2*scale,zz);dummyOuter.updateMatrix();outerForest.setMatrixAt(outerCount,dummyOuter.matrix);
-    dummyOuter.position.y=base+.4*scale;dummyOuter.updateMatrix();outerTrunks.setMatrixAt(outerCount,dummyOuter.matrix);outerCount++;
-  }
-  outerForest.count=outerTrunks.count=outerCount;tiles.add(outerForest,outerTrunks);
   buildLandscape();
   const mid=Math.floor(N/2),[mx,mz]=W(mid,mid);
   const arena=new THREE.Mesh(new THREE.CylinderGeometry(2.35,2.35,.025,48),new THREE.MeshStandardMaterial({color:0x706757,roughness:1,transparent:true,opacity:.72}));arena.position.set(mx,.065,mz);tiles.add(arena);
