@@ -41,3 +41,17 @@ node --test tests/game.cjs
 ```
 
 Testy obejmują generowanie bossa i areny, koszty i ograniczenia akcji, kilof, ognisko, gotowanie, leczenie, obronę, atak bossa i furię, zwycięstwo oraz granice mapy. Dodatkowe testy sprawdzają koszty i zasięg łuku, amunicję, dojrzewanie i zbiór ziół, jednorazowe sidła oraz wysokości terenu na wszystkich rozmiarach mapy. Renderowanie i układ paneli wymagają osobnego sprawdzenia w przeglądarce.
+
+## WebAssembly (.wasm)
+
+`wasm/terrain.wasm` to zbudowany moduł obliczający siatkę wysokości terenu. Kod źródłowy: `wasm/terrain.ts` (AssemblyScript). Rendering, interfejs i zasady gry pozostają w JavaScript/Three.js. Plik `.wasm` sam nie uruchamia gry — otwórz plik HTML. HTML zawiera tę samą binarkę w Base64, więc nie wymaga pobierania modułu przez HTTP. Gdy WebAssembly jest niedostępne, używa dotychczasowych obliczeń JavaScript.
+
+Ponowne zbudowanie (Node.js 20+, npm):
+
+```sh
+npm ci
+npm run build:wasm
+npm test
+```
+
+Build tworzy `.wasm` i aktualizuje osadzoną kopię w HTML. Moduł nie wymaga importów hosta. Eksportuje pamięć, `terrain_height(x, z, mapSize)` oraz `terrain_grid(mapSize, groundSize, segments)` zwracające wskaźnik do siatki `Float64Array` o `(segments + 1)²` elementach (1–256 segmentów). Siatka używa stałego bufora; kolejne wywołanie nadpisuje poprzedni wynik. Testy porównują każdy wierzchołek dla wszystkich rozmiarów mapy z wersją JavaScript.
