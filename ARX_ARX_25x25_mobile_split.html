@@ -186,7 +186,7 @@ function bot(){
  }
  return{t:'end'};
 }
-function tick(){if(!S||S.win>=0||!auth||botT||!S.pl[S.turn].bot)return;botT=setTimeout(()=>{botT=0;apply(bot()||{t:"end"});sync();tick()},2200+Math.floor(Math.random()*500))}
+function tick(){if(!S||S.win>=0||!auth||botT||!S.pl[S.turn].bot)return;botT=setTimeout(()=>{botT=0;apply(bot()||{t:"end"});sync();tick()},1200+Math.floor(Math.random()*300))}
 function sync(){draw();tick()}
 function canAct(){if(!S||S.win>=0)return false;const p=S.pl[S.turn];return p.bot?false:net?p.peer===net.localPlayerId:true}
 function act(c){if(!canAct())return;apply(c);sync()}
