@@ -47,9 +47,9 @@ input{background:#24304a;color:var(--tx);border:1px solid var(--bd);border-radiu
 </div>
 <div id="recipe" class="hide"><h3>Akcje i wytwarzanie [E]</h3><div id="recipeList"></div><button onclick="document.getElementById('recipe').classList.add('hide')">Zamknij</button></div>
 <div id="bar" class="hide"><div id="inv" class="hide" aria-label="Zasoby aktywnego gracza"></div><div id="log" role="status"></div>
-<button id="bCol">Zbierz</button><button id="bInteract">Akcje [E]</button><button id="bCr">Szybkie wytwarzanie</button><button id="bHe">Ulecz</button><button id="bEat">Zjedz mięso</button><button id="bFight">Atakuj</button><button id="bGuard">Obrona</button><button id="bEnd" class="pri">Koniec tury</button><button id="bMenu">Menu</button></div>
+<button id="bCol">Zbierz</button><button id="bInteract">Akcje [E]</button><button id="bCr">Szybkie wytwarzanie</button><button id="bHe">Ulecz</button><button id="bEat">Zjedz mięso</button><button id="bFight">Atakuj</button><button id="bShoot">Strzel z łuku</button><button id="bGuard">Obrona</button><button id="bEnd" class="pri">Koniec tury</button><button id="bMenu">Menu</button></div>
 <div id="menu">
-<h1>ARX</h1><div style="opacity:.8;max-width:420px">Przygodowa gra turowa 3D o zasobach, potworach i amuletach. Widok z trzeciej osoby; ruch WASD lub klikaniem. Przytrzymaj LPM i przeciągnij, aby obrócić kamerę; C zmienia widok. Mapa 25×25 pól (rozmiar można zmienić). Pokonaj bossa (+15 pkt), a wygra gracz z największą liczbą punktów. Tura: 2 ruchy i 2 akcje. Obrona zmniejsza obrażenia do następnej tury. W Akcjach stworzysz kilof, zbudujesz ognisko i upieczesz mięso. Czerwone pola przy bossie zapowiadają uderzenie po końcu Twojej tury. Słupki oznaczają granicę gry; pola za nimi są krajobrazem. Multiplayer online bez logowania – przez kod pokoju.</div>
+<h1>ARX</h1><div style="opacity:.8;max-width:420px">Przygodowa gra turowa 3D o zasobach, potworach i amuletach. Widok z trzeciej osoby; ruch WASD lub klikaniem. Przytrzymaj LPM i przeciągnij, aby obrócić kamerę; C zmienia widok. Mapa 25×25 pól (rozmiar można zmienić). Pokonaj bossa (+15 pkt), a wygra gracz z największą liczbą punktów. Tura: 2 ruchy i 2 akcje. Obrona zmniejsza obrażenia do następnej tury. W Akcjach stworzysz kilof, łuk i strzały, zbudujesz ognisko, upieczesz mięso, zasadzisz zioła i założysz sidła. Strzelaj do potworów do 3 pól: przycisk wybiera najbliższego, kliknięcie potwora w odległości 2–3 pól wybiera cel. Zioła po 2 Twoich turach zbierzesz przyciskiem Zbierz. Czerwone pola przy bossie zapowiadają uderzenie po końcu Twojej tury. Słupki oznaczają granicę gry; góry i pagórki za nimi są krajobrazem. Multiplayer online bez logowania – przez kod pokoju.</div>
 <div class="row"><label for="mapSize">Rozmiar mapy:</label><select id="mapSize"><option value="25" selected>25 × 25</option><option value="35">35 × 35</option><option value="50">50 × 50</option></select></div>
 <div class="row"><button id="mSolo" class="pri">Solo vs boty</button><select id="soloB"><option>1</option><option selected>2</option><option>3</option></select></div>
 <div class="row"><button id="mLocal">Podzielony ekran (WASD / strzałki)</button><select id="locH"><option>2</option><option>3</option><option>4</option></select><select id="locB"><option value="0">bez botów</option><option value="1">+1 bot</option><option value="2">+2 boty</option></select></div>
@@ -76,17 +76,17 @@ let S,MAP,net=null,myPeer=null,panes=[],mode='',auth=true,botT=0,peers=[];
 const key=(x,y)=>y*N+x,inb=(x,y)=>x>=0&&y>=0&&x<N&&y<N;
 const mhp=k=>S.mhp[k]??(MAP[k].mon==2?60:12),ahp=k=>S.ahp[k]??(MAP[k].animal=='cow'?7:5),alive=(x,y)=>inb(x,y)&&MAP[key(x,y)].mon&&mhp(key(x,y))>0;
 const D=(a,b,c,d)=>Math.abs(a-c)+Math.abs(b-d);
-function newGame(seed,list){MAP=genMap(seed);S={seed,turn:0,m:2,a:2,camps:{},bossWarning:false,taken:{},mhp:{},ahp:{},log:"Start gry!",win:-1,pl:list.map((p,i)=>({...p,x:[0,N-1,0,N-1][i],y:[0,N-1,N-1,0][i],hp:10,atk:0,am:0,dir:{x:0,z:1},pts:0,weapon:0,armor:0,pickaxe:0,guard:false,inv:{wood:0,stone:0,ore:0,herb:0,meat:0,cooked:0}}))}}
+function newGame(seed,list){MAP=genMap(seed);S={seed,turn:0,m:2,a:2,camps:{},gardens:{},traps:{},completedTurns:list.map(()=>0),bossWarning:false,taken:{},mhp:{},ahp:{},log:"Start gry!",win:-1,pl:list.map((p,i)=>({...p,x:[0,N-1,0,N-1][i],y:[0,N-1,N-1,0][i],hp:10,atk:0,am:0,dir:{x:0,z:1},pts:0,weapon:0,armor:0,pickaxe:0,bow:false,guard:false,inv:{wood:0,stone:0,ore:0,herb:0,meat:0,cooked:0,arrows:0}}))}}
 function die(p,i,killerIndex=null){
  const spawnX=[0,N-1,0,N-1][i],spawnY=[0,N-1,N-1,0][i],killer=Number.isInteger(killerIndex)?S.pl[killerIndex]:null,loot={};
  if(killer&&killer!==p){for(const r of ["wood","stone","ore","herb","meat","cooked"]){const amount=Math.floor((p.inv[r]||0)/3);if(amount>0){p.inv[r]-=amount;killer.inv[r]=(killer.inv[r]||0)+amount;loot[r]=amount}}}
- p.x=spawnX;p.y=spawnY;p.hp=5;p.weapon=0;p.armor=0;p.atk=0;p.guard=false;p.skipTurns=(p.skipTurns||0)+1;
+ p.x=spawnX;p.y=spawnY;p.hp=5;p.weapon=0;p.armor=0;p.atk=0;p.guard=false;p.bow=false;p.skipTurns=(p.skipTurns||0)+1;
  if(i===S.turn){S.m=0;S.a=0;}
  const summary=Object.entries(loot).map(([r,n])=>n+" "+({wood:"drewna",stone:"kamienia",ore:"rudy",herb:"ziół",meat:"mięsa",cooked:"pieczeń"}[r])).join(", ");
  S.log=p.name+" ginie, wraca na start, traci miecz i pancerz oraz opuści następną turę"+(killer&&killer!==p?". "+killer.name+" otrzymuje 1/3 materiałów"+(summary?": "+summary:"."):".");
 }
 function nextTurn(){
- const mid=Math.floor(N/2),bk=key(mid,mid),p=S.pl[S.turn];let event='';
+ S.completedTurns[S.turn]++;const mid=Math.floor(N/2),bk=key(mid,mid),p=S.pl[S.turn];let event='';
  if(alive(mid,mid)){
   if(S.bossWarning){
    if(D(p.x,p.y,mid,mid)<=2){const damage=Math.max(1, (mhp(bk)<=30?6:4)-(p.armor||0)-(p.guard?2:0));p.hp-=damage;event=' Strażnik uderza w ziemię: '+damage+' obrażeń!';if(p.hp<=0){die(p,S.turn);event=' '+S.log;}}
@@ -94,19 +94,25 @@ function nextTurn(){
   }else if(S.pl.some(q=>D(q.x,q.y,mid,mid)<=3)){S.bossWarning=true;event=' Strażnik szykuje uderzenie! Opuść czerwone pola lub użyj obrony.';}
  }
  let guard=0;do{S.turn=(S.turn+1)%S.pl.length;guard++;}while(S.pl[S.turn].skipTurns>0&&guard<=S.pl.length&&(S.pl[S.turn].skipTurns--,true));S.pl[S.turn].guard=false;S.m=2+S.pl[S.turn].am;S.a=2;S.log=S.pl[S.turn].skipTurns===0&&guard>1?"Tura pominięta po śmierci. Teraz: "+S.pl[S.turn].name:"Tura: "+S.pl[S.turn].name;S.log+=event}
+function gardenReady(k){const g=S.gardens[k];return !!g&&S.completedTurns[g.owner]>=g.ready}
+function monsterTargets(p,range){const targets=[];for(let y=Math.max(0,p.y-range);y<=Math.min(N-1,p.y+range);y++)for(let x=Math.max(0,p.x-range);x<=Math.min(N-1,p.x+range);x++)if(D(p.x,p.y,x,y)<=range&&alive(x,y))targets.push({x,y});return targets.sort((a,b)=>D(p.x,p.y,a.x,a.y)-D(p.x,p.y,b.x,b.y))}
+function canPlant(p){const k=key(p.x,p.y);return (!MAP[k].res||S.taken[k])&&!MAP[k].mon&&!MAP[k].animal&&!S.camps[k]&&!S.gardens[k]}
 function apply(c){if(S.win>=0)return;const i=S.turn,p=S.pl[i],k=key(p.x,p.y);
 if(c.t=="move"){if(!inb(c.x,c.y)||S.m<1||D(c.x,c.y,p.x,p.y)!=1||alive(c.x,c.y)||S.pl.some((q,j)=>j!==i&&q.hp>0&&q.x===c.x&&q.y===c.y))return;p.dir={x:c.x-p.x,z:c.y-p.y};p.x=c.x;p.y=c.y;S.m--}
+else if(c.t==="plant"){if(S.a<1||p.inv.herb<1||p.inv.wood<1||!canPlant(p))return;p.inv.herb--;p.inv.wood--;S.gardens[k]={owner:i,ready:S.completedTurns[i]+2};S.a--;S.log="Zasadzono zioła. Po końcu 2 Twoich tur zbierz 3 zioła (bez punktów)."}
+else if(c.t==="trap"){const target=monsterTargets(p,1).find(q=>!S.traps[key(q.x,q.y)]);if(S.a<1||p.inv.wood<2||p.inv.stone<1||!target)return;p.inv.wood-=2;p.inv.stone--;S.traps[key(target.x,target.y)]=true;S.a--;S.log="Założono sidła: następny cios w tego potwora zada dodatkowe 4 obrażenia."}
+else if(c.t==="col"&&S.gardens[k]){if(S.a<1||!gardenReady(k))return;p.inv.herb+=3;delete S.gardens[k];S.a--;S.log="Zebrano 3 wyhodowane zioła."}
 else if(c.t=="col"){const t=MAP[k];if(S.a<1||!t.res||S.taken[k])return;S.taken[k]=1;const amount=(t.res==='stone'||t.res==='ore')&&p.pickaxe?2:1;p.inv[t.res]+=amount;p.pts+=t.res=="ore"?2:1;S.a--;S.log=p.name+" zbiera "+RN[t.res]+(amount>1?" ×2 (kilof)":"")}
-else if(c.t=="att"){if(S.a<1||!inb(c.x,c.y)||D(c.x,c.y,p.x,p.y)!=1||!alive(c.x,c.y))return;const mk=key(c.x,c.y),boss=MAP[mk].mon==2,d=Math.ceil((1+Math.floor(Math.random()*6))/2)+p.atk+(p.weapon||0);S.mhp[mk]=mhp(mk)-d;S.a--;
+else if(c.t==="att"||c.t==="shot"){const shot=c.t==="shot",dist=D(c.x,c.y,p.x,p.y);if(S.a<1||!inb(c.x,c.y)||!alive(c.x,c.y)||(shot?(!p.bow||p.inv.arrows<1||dist<1||dist>3):dist!==1))return;const mk=key(c.x,c.y),boss=MAP[mk].mon==2,trapped=!!S.traps[mk],d=(shot?3:Math.ceil((1+Math.floor(Math.random()*6))/2)+(p.weapon||0))+p.atk+(trapped?4:0);if(shot)p.inv.arrows--;if(trapped)delete S.traps[mk];S.mhp[mk]=mhp(mk)-d;S.a--;
 if(S.mhp[mk]<=0){p.pts+=boss?15:3;let am=boss||Math.random()<.4;if(am)p.am++;MAP[mk].mon=0;S.log=p.name+" pokonuje "+(boss?"BOSSA (+15 pkt)":"potwora")+(am?" i zdobywa amulet (+1 ruch)!":"!");if(boss){S.bossDefeated=true;S.win=S.pl.reduce((best,q,j)=>q.pts>S.pl[best].pts?j:best,0);S.log="BOSS POKONANY! Zwycięża "+S.pl[S.win].name+" z wynikiem "+S.pl[S.win].pts+" pkt!"}}
-else{S.log=p.name+" zadaje "+d+" obrażeń.";if(Math.random()<(boss?.75:.5)){p.hp-=Math.max(1,(boss?(mhp(mk)<=30?5:4):2)-(p.armor||0)-(p.guard?2:0));S.log+=", potwór kontratakuje";if(p.hp<=0)die(p,i)}}}
+else{S.log=p.name+" zadaje "+d+" obrażeń.";if(dist===1&&Math.random()<(boss?.75:.5)){p.hp-=Math.max(1,(boss?(mhp(mk)<=30?5:4):2)-(p.armor||0)-(p.guard?2:0));S.log+=", potwór kontratakuje";if(p.hp<=0)die(p,i)}}}
 else if(c.t=="pvp"){const q=S.pl[c.i];if(S.a<1||!q||q===p||q.hp<=0||D(q.x,q.y,p.x,p.y)!=1)return;const d=2+(p.atk||0)+(p.weapon||0);q.hp-=Math.max(1,d-(q.armor||0)-(q.guard?2:0));S.a--;S.log=p.name+" atakuje gracza "+q.name+" za "+d+" obrażeń!";if(q.hp<=0){p.pts+=2;S.log+=" Pokonanie gracza: +2 pkt. ";die(q,c.i,i)}}
 else if(c.t=="animal"){const mk=key(c.x,c.y);if(S.a<1||!MAP[mk].animal||D(c.x,c.y,p.x,p.y)>1)return;const d=2+(p.atk||0)+(p.weapon||0);S.ahp[mk]=ahp(mk)-d;S.a--;if(S.ahp[mk]<=0){p.inv.meat+=(MAP[mk].animal=='cow'?3:2);MAP[mk].animal=null;S.log="Zdobywasz mięso ze zwierzęcia."}else S.log="Zwierzę otrzymuje "+d+" obrażeń."}
 else if(c.t=="guard"){if(S.a<1||p.guard)return;p.guard=true;S.a--;S.log=p.name+" przyjmuje postawę obronną (−2 obrażeń do następnej tury)."}
 else if(c.t=="cook"){if(S.a<1||!S.camps[k]||p.inv.meat<1)return;p.inv.meat--;p.inv.cooked=(p.inv.cooked||0)+1;S.a--;S.log="Upieczono mięso: leczy 6 zdrowia zamiast 3."}
 else if(c.t=="eat"){const cooked=(p.inv.cooked||0)>0;if(S.a<1||(!cooked&&p.inv.meat<1)||p.hp>=10)return;p.inv[cooked?'cooked':'meat']--;p.hp=Math.min(10,p.hp+(cooked?6:3));S.a--;S.log=p.name+(cooked?" zjada pieczeń (+6 zdrowia).":" zjada surowe mięso (+3 zdrowia).")}
-else if(c.t=="craftType"){if(S.a<1)return;if(c.what==="pickaxe"&&!p.pickaxe&&p.inv.wood>=2&&p.inv.stone>=2){p.inv.wood-=2;p.inv.stone-=2;p.pickaxe=1;S.log="Wytworzono kilof: podwójne wydobycie kamienia i rudy."}else if(c.what=="sword"&&p.inv.wood>=2&&p.inv.ore>=2){p.inv.wood-=2;p.inv.ore-=2;p.weapon++;S.log="Wytworzono żelazny miecz (+1 obrażeń)."}else if(c.what=="armor"&&p.inv.wood>=1&&p.inv.stone>=3&&p.inv.ore>=1){p.inv.wood--;p.inv.stone-=3;p.inv.ore--;p.armor++;S.log="Wytworzono pancerz (+1 obrony)."}else if(c.what=="potion"&&p.inv.herb>=3){p.inv.herb-=3;p.hp=Math.min(10,p.hp+5);S.log="Uwarzono miksturę (+5 serc)."}else return;S.a--;}
-else if(c.t=="camp"){if(S.a<1||p.inv.wood<2||p.inv.stone<1||S.camps[k])return;p.inv.wood-=2;p.inv.stone--;S.camps[k]=true;p.hp=Math.min(10,p.hp+4);S.a--;S.log=p.name+" buduje ognisko (+4 zdrowia). Można tu piec mięso i odpoczywać."}
+else if(c.t=="craftType"){if(S.a<1)return;if(c.what==="bow"&&!p.bow&&p.inv.wood>=3&&p.inv.ore>=1){p.inv.wood-=3;p.inv.ore--;p.bow=true;S.log="Wytworzono łuk. Zasięg 3 pola; strzały wytworzysz osobno."}else if(c.what==="arrows"&&p.inv.wood>=1&&p.inv.stone>=1){p.inv.wood--;p.inv.stone--;p.inv.arrows+=4;S.log="Wytworzono 4 strzały."}else if(c.what==="pickaxe"&&!p.pickaxe&&p.inv.wood>=2&&p.inv.stone>=2){p.inv.wood-=2;p.inv.stone-=2;p.pickaxe=1;S.log="Wytworzono kilof: podwójne wydobycie kamienia i rudy."}else if(c.what=="sword"&&p.inv.wood>=2&&p.inv.ore>=2){p.inv.wood-=2;p.inv.ore-=2;p.weapon++;S.log="Wytworzono żelazny miecz (+1 obrażeń)."}else if(c.what=="armor"&&p.inv.wood>=1&&p.inv.stone>=3&&p.inv.ore>=1){p.inv.wood--;p.inv.stone-=3;p.inv.ore--;p.armor++;S.log="Wytworzono pancerz (+1 obrony)."}else if(c.what=="potion"&&p.inv.herb>=3){p.inv.herb-=3;p.hp=Math.min(10,p.hp+5);S.log="Uwarzono miksturę (+5 serc)."}else return;S.a--;}
+else if(c.t=="camp"){if(S.a<1||p.inv.wood<2||p.inv.stone<1||S.camps[k]||S.gardens[k])return;p.inv.wood-=2;p.inv.stone--;S.camps[k]=true;p.hp=Math.min(10,p.hp+4);S.a--;S.log=p.name+" buduje ognisko (+4 zdrowia). Można tu piec mięso i odpoczywać."}
 else if(c.t=="rest"){if(S.a<1||!S.camps[k]||p.hp>=10)return;p.hp=Math.min(10,p.hp+2);S.a--;S.log=p.name+" odpoczywa przy ognisku (+2 zdrowia)."}
 else if(c.t=="craft"){if(S.a<1||p.inv.wood<2||p.inv.ore<1)return;p.inv.wood-=2;p.inv.ore--;p.atk++;S.a--;S.log=p.name+" wytwarza lepszą broń (+1)"}
 else if(c.t=="heal"){if(S.a<1||p.inv.herb<2||p.hp>=10)return;p.inv.herb-=2;p.hp=Math.min(10,p.hp+3);S.a--;S.log=p.name+" leczy się"}
@@ -222,20 +228,26 @@ const sc=new THREE.Scene();sc.add(new THREE.HemisphereLight(0xe5f1ff,0x263d2b,.8
 const tiles=new THREE.Group(),dyn=new THREE.Group();let gridTiles=null;sc.add(tiles,dyn);
 const mats={},mt=c=>mats[c]||(mats[c]=new THREE.MeshLambertMaterial({color:new THREE.Color(c).convertSRGBToLinear()})),G={box:new THREE.BoxGeometry(.96,1,.96),cone:new THREE.ConeGeometry(.28,.8,7),rock:new THREE.DodecahedronGeometry(.25),sph:new THREE.SphereGeometry(.3,12,10),cyl:new THREE.CylinderGeometry(.2,.25,.7,10),herb:new THREE.OctahedronGeometry(.18)};
 const W=(x,y)=>[x-N/2+.5,y-N/2+.5];
-function terrainHeight(x,z){return .035*Math.sin(x*.47+1.2)*Math.cos(z*.39-.6)+.018*Math.sin((x-z)*.72)}
+function terrainHeight(x,z){
+ const base=.035*Math.sin(x*.47+1.2)*Math.cos(z*.39-.6)+.018*Math.sin((x-z)*.72);
+ const outside=Math.max(0,Math.max(Math.abs(x),Math.abs(z))-N/2-2),blend=Math.min(1,outside/14),smooth=blend*blend*(3-2*blend);
+ const hills=2.5+2*Math.sin(x*.09+.6)*Math.cos(z*.08),ridge=Math.pow(Math.abs(Math.sin(x*.045+z*.038)),3),mountains=14*ridge+3*Math.sin(z*.16)*Math.sin(x*.12);
+ return base+smooth*(hills+Math.min(1,outside/32)*mountains);
+}
 const TILE_TOP=.025,TILE_HEIGHT=.06;
 function groundAtCell(x,y){const [a,b]=W(x,y);return terrainHeight(a,b)+TILE_TOP}
 function makeGroundTexture(){const c=document.createElement('canvas');c.width=c.height=1024;const ctx=c.getContext('2d');ctx.fillStyle='#526f3e';ctx.fillRect(0,0,1024,1024);const r=rng(7431);
 for(let i=0;i<15000;i++){const v=r();ctx.globalAlpha=.035+r()*.12;ctx.fillStyle=v>.56?'#a0a56a':v>.28?'#314c2e':'#233c26';const w=1+r()*7,h=1+r()*4;ctx.beginPath();ctx.ellipse(r()*1024,r()*1024,w,h,r()*Math.PI,0,Math.PI*2);ctx.fill()}
 for(let i=0;i<90;i++){ctx.globalAlpha=.025+r()*.035;ctx.fillStyle=r()>.5?'#c4ad78':'#263d2b';ctx.beginPath();ctx.ellipse(r()*1024,r()*1024,20+r()*70,10+r()*35,r()*Math.PI,0,Math.PI*2);ctx.fill()}
 ctx.globalAlpha=1;const tex=new THREE.CanvasTexture(c);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.repeat.set(40,40);tex.anisotropy=8;tex.encoding=THREE.sRGBEncoding;return tex}
-const groundMaterial=new THREE.MeshStandardMaterial({map:makeGroundTexture(),color:0xffffff,roughness:1,metalness:0});
+const groundMaterial=new THREE.MeshStandardMaterial({map:makeGroundTexture(),color:0xffffff,vertexColors:true,roughness:1,metalness:0});
 function build(){
  clearGroup(tiles);gridTiles=null;
  // Cała mapa ma jeden ciągły podkład, a siatka pól jest renderowana instancjami.
  // Dzięki temu 15 876 pól nie tworzy tysięcy osobnych obiektów Three.js.
  const groundSize=N+130,segments=180,geo=new THREE.PlaneGeometry(groundSize,groundSize,segments,segments),pos=geo.attributes.position;
  for(let i=0;i<pos.count;i++)pos.setZ(i,terrainHeight(pos.getX(i),-pos.getY(i)));
+ const colors=[];for(let j=0;j<pos.count;j++){const h=pos.getZ(j),c=new THREE.Color(h>13?0xb6bcb7:h>8?0x777d70:h>3?0x597044:0xffffff).convertSRGBToLinear();colors.push(c.r,c.g,c.b)}geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
  geo.computeVertexNormals();geo.rotateX(-Math.PI/2);const ground=new THREE.Mesh(geo,groundMaterial);ground.receiveShadow=true;ground.position.y=0;tiles.add(ground);
  const tileGeo=new THREE.BoxGeometry(.97,TILE_HEIGHT,.97);
  const sideMat=new THREE.MeshStandardMaterial({color:0x405f32,roughness:1});
@@ -261,10 +273,6 @@ function build(){
 }
 function buildLandscape(){
  const d=new THREE.Object3D();
- for(const side of [-1,1])for(let field=0;field<4;field++){
-  const x=side*(N/2+9+field*9),z=(field-1.5)*12;
-  const soil=new THREE.Mesh(new THREE.PlaneGeometry(7,10),new THREE.MeshStandardMaterial({color:field%2?0x657843:0x74603c,roughness:1}));soil.rotation.x=-Math.PI/2;soil.position.set(x,.07,z);tiles.add(soil);
- }
  const posts=new THREE.InstancedMesh(new THREE.CylinderGeometry(.06,.08,.65,6),mt(0x967653),4*(Math.ceil(N/3)+1));let n=0;
  for(let i=-N/2;i<=N/2;i+=3)for(const [x,z] of [[i,-N/2],[i,N/2],[-N/2,i],[N/2,i]]){d.position.set(x,terrainHeight(x,z)+.325,z);d.rotation.set(0,0,0);d.scale.setScalar(1);d.updateMatrix();posts.setMatrixAt(n++,d.matrix)}posts.count=n;tiles.add(posts);
 }
@@ -331,10 +339,12 @@ function makeCharacter(p,i){
  if(p.weapon){const steel=new THREE.MeshStandardMaterial({color:0xc3ced1,metalness:.8,roughness:.27});const sword=new THREE.Group();sword.position.set(.32,.77,.10);sword.rotation.x=p.guard?-.7:-.18;part(sword,new THREE.BoxGeometry(.052,.59,.025),steel,0,.34,0);part(sword,new THREE.ConeGeometry(.037,.12,4),steel,0,.695,0);part(sword,new THREE.BoxGeometry(.2,.035,.065),sm(0xb0924f),0,.05,0);limb(sword,leather,0,-.02,0,.025,.1);root.add(sword)}
  if(p.armor){const iron=new THREE.MeshStandardMaterial({color:0x78848c,metalness:.65,roughness:.42});part(root,sphere,iron,0,1.13,.025,.247,.25,.17);for(const side of [-1,1])part(root,sphere,iron,side*.242,1.29,0,.115,.07,.135)}
  if(p.guard){const shield=part(root,new THREE.CylinderGeometry(.24,.24,.065,16),sm(0x71818d),-.34,1.05,.2);shield.rotation.x=Math.PI/2;part(root,sphere,sm(0xc2ad78),-.34,1.05,.25,.07,.07,.025)}
+ if(p.bow){const bow=part(root,new THREE.TorusGeometry(.25,.022,6,20,Math.PI),leather,-.18,1.04,-.3);bow.rotation.z=Math.PI/2;const string=part(root,new THREE.CylinderGeometry(.004,.004,.5,4),sm(0xd6c7a3),-.18,1.04,-.3);string.rotation.z=0;}
  const d=p.dir||{x:0,z:1};root.rotation.y=Math.atan2(d.x,d.z);
  root.userData.npcAnimation={type:'human',phase:i*1.7,baseY:root.position.y,baseRot:root.rotation.y,head};
  root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});dyn.add(root);
 }
+function makeGarden(x,y,ready){const root=new THREE.Group(),[a,b]=W(x,y);root.position.set(a,groundAtCell(x,y),b);for(let j=0;j<5;j++){const leaf=part(root,new THREE.SphereGeometry(1,7,5),sm(ready?0x4d873f:0x75944e),(j%3-1)*.16,.06+Number(ready)*.1,(Math.floor(j/3)-.5)*.2,.07,ready?.18:.06,.07);leaf.rotation.z=(j%2-.5)*.6;if(ready)part(root,new THREE.SphereGeometry(.04,7,5),sm(0xbf80bb),(j%3-1)*.16,.3,(Math.floor(j/3)-.5)*.2)}dyn.add(root)}
 function makeCamp(x,y){const root=new THREE.Group(),[a,b]=W(x,y);root.position.set(a,groundAtCell(x,y),b);for(let i=0;i<8;i++){const angle=i/8*Math.PI*2;part(root,new THREE.DodecahedronGeometry(.09),ST,Math.cos(angle)*.29,.07,Math.sin(angle)*.29)}for(const side of [-1,1]){const log=part(root,new THREE.CylinderGeometry(.06,.07,.45,7),BR,0,.1,0);log.rotation.set(Math.PI/2,side*.65,0)}const flame=part(root,new THREE.ConeGeometry(.14,.43,7),new THREE.MeshStandardMaterial({color:0xffbc4e,emissive:0xff641d,emissiveIntensity:1.5}),0,.29,0);root.userData.npcAnimation={type:'fire',phase:x+y,baseY:root.position.y,baseRot:0,head:flame};dyn.add(root)}
 function obj(t,k,x,y){if(!t.res)return;const r=rng(k+3);
 if(t.res=="wood"){if(S.taken[k]){const m=put(G.cyl,0x6b3a26,x,y,.35);m.scale.set(.5,.25,.5)}else tree(x,y,k);return}
@@ -408,17 +418,19 @@ visibleCells.add(key(Math.floor(N/2),Math.floor(N/2)));
 for(const k of visibleCells){const t=MAP[k],x=k%N,y=Math.floor(k/N);
  obj(t,k,x,y);
  if(S.camps[k])makeCamp(x,y);
+ if(S.gardens[k])makeGarden(x,y,gardenReady(k));
+ if(S.traps[k]){const [tx,tz]=W(x,y),ring=new THREE.Mesh(new THREE.TorusGeometry(.4,.035,6,24),sm(0xa58b58));ring.rotation.x=-Math.PI/2;ring.position.set(tx,groundAtCell(x,y)+.07,tz);dyn.add(ring)}
  if(t.mon&&mhp(k)>0)makeMonster(t,k,x,y);
  if(t.animal)makeAnimal(t,k,x,y);
 }
 if(S.bossWarning){const mid=Math.floor(N/2);for(let y=mid-2;y<=mid+2;y++)for(let x=mid-2;x<=mid+2;x++)if(D(x,y,mid,mid)<=2){const [wx,wz]=W(x,y),m=new THREE.Mesh(new THREE.PlaneGeometry(.92,.92),new THREE.MeshBasicMaterial({color:0xef493a,transparent:true,opacity:.42,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(wx,.095,wz);dyn.add(m)}}
 S.pl.forEach((p,i)=>{makeCharacter(p,i);const [a,b]=W(p.x,p.y);healthBar(a,b,groundAtCell(p.x,p.y)+2.05,p.hp,10)});
 $("hud").innerHTML=S.pl.map((p,i)=>`<div class="pc ${i==S.turn?"cur":""}" style="border-left-color:#${COL[i].toString(16)}"><b>${p.name}${p.bot?" · BOT":""}</b><span class="score">★ ${p.pts} pkt</span><div class="hearts">${Array.from({length:10},(_,n)=>`<span class="heart ${n>=p.hp?"off":""}">♥</span>`).join("")}</div><small>⚔ ${p.atk+p.weapon} · 🛡 ${p.armor} · ✦ ${p.am} · 🥩 ${p.inv.meat} · 🪵 ${p.inv.wood} · ⛏ ${p.inv.ore}</small></div>`).join("");
-const ca=canAct(),p=S.pl[S.turn];$("inv").innerHTML=[['🪵 Drewno',p.inv.wood],['🪨 Kamień',p.inv.stone],['⛏ Ruda',p.inv.ore],['🌿 Zioła',p.inv.herb],['🥩 Mięso',p.inv.meat],['🍖 Pieczeń',p.inv.cooked||0],['⚔ Miecz',p.weapon],['🛡 Pancerz',p.armor],['Kilof',p.pickaxe?'tak':'nie']].map(([label,n])=>`<span>${label} <b>${n}</b></span>`).join('');
+const ca=canAct(),p=S.pl[S.turn];$("inv").innerHTML=[['🪵 Drewno',p.inv.wood],['🪨 Kamień',p.inv.stone],['⛏ Ruda',p.inv.ore],['🌿 Zioła',p.inv.herb],['🥩 Mięso',p.inv.meat],['🍖 Pieczeń',p.inv.cooked||0],['⚔ Miecz',p.weapon],['🛡 Pancerz',p.armor],['Kilof',p.pickaxe?'tak':'nie'],['🏹 Łuk',p.bow?'tak':'nie'],['Strzały',p.inv.arrows]].map(([label,n])=>`<span>${label} <b>${n}</b></span>`).join('');
 const mid=Math.floor(N/2),bk=key(mid,mid),hp=Math.max(0,mhp(bk));$('bossHud').innerHTML=`<b>STRAŻNIK PÓL · ${hp}/60 HP</b><progress max="60" value="${hp}"></progress><small>${hp<=0?'Pokonany':S.bossWarning?'⚠ Uderzenie: czerwone pola · po końcu tury':hp<=30?'Furia · silniejsze ciosy':'Centrum mapy · '+D(p.x,p.y,mid,mid)+' pól od Ciebie'}</small>`;
 $('bGuard').disabled=!ca||S.a<1||p.guard;
 $("log").textContent=S.log+"  |  ruchy: "+S.m+"  akcje: "+S.a;
-$("bCol").disabled=!ca||S.a<1||!MAP[key(p.x,p.y)].res||!!S.taken[key(p.x,p.y)];$("bCr").disabled=!ca||S.a<1||p.inv.wood<2||p.inv.ore<1;$("bHe").disabled=!ca||S.a<1||p.inv.herb<2||p.hp>=10;$("bEnd").disabled=!ca;$("bEat").disabled=!ca||S.a<1||(p.inv.meat<1&&!(p.inv.cooked>0))||p.hp>=10;$("bFight").disabled=!ca||S.a<1;updateOverlayLayout();if(!$("recipe").classList.contains("hide"))openRecipes(true)}
+const here=key(p.x,p.y);$("bCol").disabled=!ca||S.a<1||(S.gardens[here]?!gardenReady(here):(!MAP[here].res||!!S.taken[here]));$('bShoot').disabled=!ca||S.a<1||!p.bow||p.inv.arrows<1||!monsterTargets(p,3).length;$("bCr").disabled=!ca||S.a<1||p.inv.wood<2||p.inv.ore<1;$("bHe").disabled=!ca||S.a<1||p.inv.herb<2||p.hp>=10;$("bEnd").disabled=!ca;$("bEat").disabled=!ca||S.a<1||(p.inv.meat<1&&!(p.inv.cooked>0))||p.hp>=10;$("bFight").disabled=!ca||S.a<1;updateOverlayLayout();if(!$("recipe").classList.contains("hide"))openRecipes(true)}
 function updateOverlayLayout(){const root=document.documentElement;root.style.setProperty('--bar-height',$('bar').offsetHeight+'px');root.style.setProperty('--inv-height',$('inv').offsetHeight+'px')}
 const overlayObserver=new ResizeObserver(()=>{updateOverlayLayout();layout()});overlayObserver.observe($('bar'));overlayObserver.observe($('inv'));
 let cameraMode='third',cameraYaw=0,cameraPitch=.32,cameraZoom=1,dragState=null,lastKeyMove=0,activeCameraPane=0,cameraYawByPane=[0,0,0,0],cameraPitchByPane=[.32,.32,.32,.32];
@@ -438,6 +450,7 @@ function selectWorldAt(e,pn){
  const hit=ray.intersectObjects(tiles.children,true).find(h=>h.object===gridTiles&&Number.isInteger(h.instanceId));
  if(!hit)return;const idx=hit.instanceId,x=idx%N,y=Math.floor(idx/N),p=S.pl[S.turn];
  if(alive(x,y)&&D(x,y,p.x,p.y)===1)act({t:'att',x,y});
+ else if(alive(x,y)&&p.bow&&D(x,y,p.x,p.y)<=3)act({t:'shot',x,y});
  else if(MAP[key(x,y)].animal&&D(x,y,p.x,p.y)===1)act({t:'animal',x,y});
  else if(x===p.x&&y===p.y)act({t:'col'});
  else{const q=S.pl.findIndex((v,i)=>i!==S.turn&&v.hp>0&&v.x===x&&v.y===y);if(q>=0&&D(x,y,p.x,p.y)===1)act({t:'pvp',i:q});else act({t:'move',x,y})}
@@ -447,8 +460,8 @@ R.domElement.addEventListener('pointermove',e=>{if(!dragState||dragState.id!==e.
 R.domElement.addEventListener('pointerup',e=>{if(!dragState||dragState.id!==e.pointerId)return;const d=dragState;dragState=null;if(!d.moved&&Math.hypot(e.clientX-d.x,e.clientY-d.y)<7)selectWorldAt(e,d.pn)});R.domElement.addEventListener('pointercancel',()=>{dragState=null});
 function moveByKey(k){if(k==='arrowup')k='w';else if(k==='arrowdown')k='s';else if(k==='arrowleft')k='a';else if(k==='arrowright')k='d';if(!S||!canAct()||S.m<1)return;const p=S.pl[S.turn],d=p.dir||{x:0,z:1},yaw=Math.atan2(-d.x,-d.z)+(cameraYawByPane[activeCameraPane]??cameraYaw),fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=fz,rz=-fx;let vx=0,vz=0;if(k==='w'){vx=fx;vz=fz}else if(k==='s'){vx=-fx;vz=-fz}else if(k==='a'){vx=-rx;vz=-rz}else if(k==='d'){vx=rx;vz=rz}else return;const xs=Math.abs(vx)>Math.abs(vz)?Math.sign(vx):0,zs=Math.abs(vz)>=Math.abs(vx)?Math.sign(vz):0,nx=p.x+xs,ny=p.y+zs;if(nx===p.x&&ny===p.y)return;act({t:'move',x:nx,y:ny})}
 R.domElement.addEventListener('contextmenu',e=>e.preventDefault());
-function openRecipes(refresh=false){if(!S)return;const p=S.pl[S.turn],camp=!!S.camps[key(p.x,p.y)],r=[['Kilof','2 drewna + 2 kamienie · podwójne wydobycie','pickaxe',!p.pickaxe&&p.inv.wood>=2&&p.inv.stone>=2],['Piecz mięso','Ognisko + 1 mięso · pieczeń leczy 6','cook',camp&&p.inv.meat>0],['Odpocznij','Przy ognisku · +2 zdrowia','rest',camp&&p.hp<10],['Miecz żelazny','2 drewna + 2 rudy','sword',p.inv.wood>=2&&p.inv.ore>=2],['Pancerz','1 drewno + 3 kamienie + 1 ruda','armor',p.inv.wood>=1&&p.inv.stone>=3&&p.inv.ore>=1],['Mikstura','3 zioła · leczy 5 serc','potion',p.inv.herb>=3],['Ognisko','2 drewna + 1 kamień · leczy 4 serca','camp',p.inv.wood>=2&&p.inv.stone>=1&&!camp]];$('recipeList').innerHTML=r.map(([n,c,w,ok])=>`<div class="rec"><span><b>${n}</b><br><small>${c}</small></span><button ${!canAct()||S.a<1||!ok?'disabled':''} data-craft="${w}">${w==='rest'?'Odpocznij':w==='cook'?'Upiecz':w==='camp'?'Zbuduj':'Wytwórz'}</button></div>`).join('');$('recipeList').querySelectorAll('[data-craft]').forEach(b=>b.onclick=()=>{act(['camp','cook','rest'].includes(b.dataset.craft)?{t:b.dataset.craft}:{t:'craftType',what:b.dataset.craft});openRecipes(true)});if(!refresh)$('recipe').classList.toggle('hide')}
-$("bInteract").onclick=()=>openRecipes();$("bGuard").onclick=()=>act({t:"guard"});
+function openRecipes(refresh=false){if(!S)return;const p=S.pl[S.turn],camp=!!S.camps[key(p.x,p.y)],r=[['Łuk','3 drewna + 1 ruda · zasięg 3 pola','bow',!p.bow&&p.inv.wood>=3&&p.inv.ore>=1],['4 strzały','1 drewno + 1 kamień','arrows',p.inv.wood>=1&&p.inv.stone>=1],['Zasadź zioła','1 zioło + 1 drewno · zbiór 3 po 2 Twoich turach','plant',p.inv.herb>=1&&p.inv.wood>=1&&canPlant(p)],['Załóż sidła','2 drewna + 1 kamień · następny cios +4','trap',p.inv.wood>=2&&p.inv.stone>=1&&monsterTargets(p,1).some(q=>!S.traps[key(q.x,q.y)])],['Kilof','2 drewna + 2 kamienie · podwójne wydobycie','pickaxe',!p.pickaxe&&p.inv.wood>=2&&p.inv.stone>=2],['Piecz mięso','Ognisko + 1 mięso · pieczeń leczy 6','cook',camp&&p.inv.meat>0],['Odpocznij','Przy ognisku · +2 zdrowia','rest',camp&&p.hp<10],['Miecz żelazny','2 drewna + 2 rudy','sword',p.inv.wood>=2&&p.inv.ore>=2],['Pancerz','1 drewno + 3 kamienie + 1 ruda','armor',p.inv.wood>=1&&p.inv.stone>=3&&p.inv.ore>=1],['Mikstura','3 zioła · leczy 5 serc','potion',p.inv.herb>=3],['Ognisko','2 drewna + 1 kamień · leczy 4 serca','camp',p.inv.wood>=2&&p.inv.stone>=1&&!camp&&!S.gardens[key(p.x,p.y)]]];$('recipeList').innerHTML=r.map(([n,c,w,ok])=>`<div class="rec"><span><b>${n}</b><br><small>${c}</small></span><button ${!canAct()||S.a<1||!ok?'disabled':''} data-craft="${w}">${w==='plant'?'Zasadź':w==='trap'?'Załóż':w==='rest'?'Odpocznij':w==='cook'?'Upiecz':w==='camp'?'Zbuduj':'Wytwórz'}</button></div>`).join('');$('recipeList').querySelectorAll('[data-craft]').forEach(b=>b.onclick=()=>{act(['camp','cook','rest','plant','trap'].includes(b.dataset.craft)?{t:b.dataset.craft}:{t:'craftType',what:b.dataset.craft});openRecipes(true)});if(!refresh)$('recipe').classList.toggle('hide')}
+$("bShoot").onclick=()=>{if(!S)return;const q=monsterTargets(S.pl[S.turn],3)[0];if(q)act({t:"shot",x:q.x,y:q.y})};$("bInteract").onclick=()=>openRecipes();$("bGuard").onclick=()=>act({t:"guard"});
 $('bCam').onclick=cycleCamera;updateCameraLabel();
 addEventListener('keydown',e=>{const tag=e.target&&e.target.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;const k=e.key.toLowerCase();if(['w','a','s','d','c','e','arrowup','arrowdown','arrowleft','arrowright'].includes(k))e.preventDefault();if(k==='e'&&!e.repeat&&S){openRecipes();return}if(k==='c'&&!e.repeat&&S){cycleCamera();return}if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(k)){const now=Date.now();if(!e.repeat||now-lastKeyMove>260){lastKeyMove=now;moveByKey(k)}}});
 $('touchPad').querySelectorAll('[data-move]').forEach(b=>b.addEventListener('click',()=>moveByKey(b.dataset.move)));
