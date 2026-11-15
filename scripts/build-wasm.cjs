@@ -1,0 +1,15 @@
+const {execFileSync}=require('node:child_process');
+const fs=require('node:fs');const path=require('node:path');
+const root=path.join(__dirname,'..');
+execFileSync(process.execPath,[path.join(root,'node_modules/assemblyscript/bin/asc.js'),'wasm/terrain.ts','--outFile','wasm/terrain.wasm','--optimize','--runtime','stub','--noAssert'],{cwd:root,stdio:'inherit'});
+const binary=fs.readFileSync(path.join(root,'wasm/terrain.wasm'));
+const moduleObject=new WebAssembly.Module(binary);
+if(WebAssembly.Module.imports(moduleObject).length)throw Error('Unexpected WASM imports');
+const file=path.join(root,'ARX_ARX_25x25_mobile_split.html');
+let html=fs.readFileSync(file,'utf8');
+const start='<!-- ARX_WASM_START -->',end='<!-- ARX_WASM_END -->';
+const embedded=`${start}\n<script id="terrainWasmBinary" type="application/octet-stream">${binary.toString('base64')}</script>\n${end}`;
+if(html.includes(start))html=html.slice(0,html.indexOf(start))+embedded+html.slice(html.indexOf(end)+end.length);
+else html=html.replace('<script>\n',embedded+'\n<script>\n');
+fs.writeFileSync(file,html);
+console.log(`Built wasm/terrain.wasm (${binary.length} bytes), validated and embedded in HTML.`);

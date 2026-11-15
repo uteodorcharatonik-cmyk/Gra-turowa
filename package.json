@@ -1,0 +1,1 @@
+{"name":"arx-game","private":true,"scripts":{"build:wasm":"node scripts/build-wasm.cjs","test":"node --test tests/*.cjs"},"devDependencies":{"assemblyscript":"0.28.9"}}
