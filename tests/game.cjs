@@ -1,0 +1,15 @@
+// Run: node --test tests/game.cjs. No dependencies or WebGL required.
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const vm=require('node:vm');
+const fs=require('node:fs');
+const html=fs.readFileSync(require('node:path').join(__dirname,'../ARX_ARX_25x25_mobile_split.html'),'utf8');
+const script=html.split('<script>')[1].split('// ---- 3D')[0];
+function game(code){const ctx=vm.createContext({document:{getElementById:()=>({})},setTimeout,clearTimeout});vm.runInContext(script,ctx);return vm.runInContext(`newGame(123,[{name:'A'},{name:'B'}]);${code}`,ctx)}
+test('one central boss and clear arena for every map size',()=>{for(const size of [25,35,50])assert.equal(game(`N=${size};newGame(123,[{name:'A'},{name:'B'}]);const mid=Math.floor(N/2);if(MAP.filter(t=>t.mon===2).length!==1)throw Error('boss count');for(let y=mid-2;y<=mid+2;y++)for(let x=mid-2;x<=mid+2;x++){const t=MAP[key(x,y)];if(t.res||t.animal||(t.mon===1))throw Error('blocked arena')}MAP[key(mid,mid)].mon`),2)});
+test('kilof costs materials and one action; mining doubles, never collects twice',()=>assert.equal(game(`const p=S.pl[0];p.inv.wood=2;p.inv.stone=2;apply({t:'craftType',what:'pickaxe'});if(p.pickaxe!==1||p.inv.wood||p.inv.stone||S.a!==1)throw Error('cost');MAP[0].res='ore';apply({t:'col'});S.a=2;apply({t:'col'});p.inv.ore`),2));
+test('camp persists; cooking consumes meat and action; cooked food heals six',()=>assert.equal(game(`const p=S.pl[0];p.hp=2;p.inv.wood=2;p.inv.stone=1;p.inv.meat=1;apply({t:'camp'});if(!S.camps[0]||p.hp!==6)throw Error('camp');apply({t:'cook'});if(p.inv.meat!==0||p.inv.cooked!==1||S.a!==0)throw Error('cook');apply({t:'eat'});if(p.inv.cooked!==1)throw Error('free action');S.a=2;p.hp=3;apply({t:'eat'});if(p.inv.cooked!==0)throw Error('consume');p.hp`),9));
+test('guard reduces PvP damage and expires at next own turn',()=>assert.equal(game(`const a=S.pl[0],b=S.pl[1];a.x=1;a.y=0;b.x=2;b.y=0;apply({t:'guard'});if(S.a!==1)throw Error('cost');apply({t:'end'});b.weapon=3;apply({t:'pvp',i:0});if(a.hp!==7)throw Error('guard');apply({t:'end'});a.guard`),false));
+test('boss warns, slam respects guard and armor, fury hits harder',()=>assert.equal(game(`const mid=Math.floor(N/2),p=S.pl[0];p.x=mid;p.y=mid+1;apply({t:'end'});if(!S.bossWarning)throw Error('warning');const q=S.pl[1];q.x=mid+1;q.y=mid;q.armor=1;apply({t:'guard'});apply({t:'end'});if(q.hp!==9||S.bossWarning)throw Error('slam');S.mhp[key(mid,mid)]=30;S.bossWarning=true;apply({t:'end'});p.hp`),4));
+test('boss kill ends game and grants fifteen points',()=>assert.equal(game(`const mid=Math.floor(N/2),p=S.pl[0];p.x=mid;p.y=mid+1;S.mhp[key(mid,mid)]=1;apply({t:'att',x:mid,y:mid});if(S.win!==0||!S.bossDefeated)throw Error('victory');p.pts`),15));
+test('decorative landscape cannot be entered; actions require resources',()=>assert.equal(game(`apply({t:'move',x:-1,y:0});apply({t:'craftType',what:'pickaxe'});apply({t:'cook'});apply({t:'rest'});if(S.pl[0].x!==0)throw Error('bounds');S.a`),2));
