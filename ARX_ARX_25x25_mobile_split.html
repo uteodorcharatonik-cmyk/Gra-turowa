@@ -50,12 +50,12 @@ input{background:#24304a;color:var(--tx);border:1px solid var(--bd);border-radiu
 <div id="bar" class="hide"><div id="inv" class="hide" aria-label="Zasoby aktywnego gracza"></div><div id="log" role="status"></div>
 <button id="bCol">Zbierz</button><button id="bInteract">Akcje [E]</button><button id="bCr">Szybkie wytwarzanie</button><button id="bHe">Ulecz</button><button id="bEat">Zjedz mięso</button><button id="bFight">Atakuj</button><button id="bShoot">Strzel z łuku</button><button id="bGuard">Obrona</button><button id="bEnd" class="pri">Koniec tury</button><button id="bMenu">Menu</button></div>
 <div id="menu">
-<h1>ARX</h1>
+<h1>ARX</h1><p style="max-width:420px;margin:0 0 12px;line-height:1.5;color:#c8d3cd">Turowa przygoda 3D: zbieraj zasoby, twórz wyposażenie i pokonaj bossa. Graj solo z botami lub wspólnie na podzielonym ekranie.</p>
 <div class="row"><label for="mapSize">Rozmiar mapy:</label><select id="mapSize"><option value="25" selected>25 × 25</option><option value="35">35 × 35</option><option value="50">50 × 50</option></select></div>
 <div class="row"><button id="mSolo" class="pri">Solo vs boty</button><select id="soloB"><option>1</option><option selected>2</option><option>3</option></select></div>
 <div class="row"><button id="mLocal">Podzielony ekran (WASD / strzałki)</button><select id="locH"><option>2</option><option>3</option><option>4</option></select><select id="locB"><option value="0">bez botów</option><option value="1">+1 bot</option><option value="2">+2 boty</option></select></div>
 <button id="mHelp">Instrukcja</button>
-<dialog id="help" aria-labelledby="helpTitle"><header><span>PRZEWODNIK PO ARX</span><h2 id="helpTitle">Twoja przygoda zaczyna się tutaj</h2><p>Zbieraj zasoby, rozwijaj wyposażenie i przygotuj się na spotkanie ze Strażnikiem Pól.</p></header>
+<dialog id="help" aria-labelledby="helpTitle" tabindex="-1"><header><span>PRZEWODNIK PO ARX</span><h2 id="helpTitle">Twoja przygoda zaczyna się tutaj</h2><p>Zbieraj zasoby, rozwijaj wyposażenie i przygotuj się na spotkanie ze Strażnikiem Pól.</p></header>
 <section><h3>01 · Cel gry</h3><p>Pokonanie bossa w centrum mapy daje 15 punktów i kończy rozgrywkę. Wygrywa gracz z największą liczbą punktów. Zasoby i potwory także dają punkty.</p></section>
 <section><h3>02 · Sterowanie i tury</h3><p>Ruszaj się klawiszami WASD, strzałkami lub przyciskami dotykowymi. Kliknij sąsiednie pole, aby przejść, zebrać zasób pod sobą albo zaatakować. Przeciągnij widok, aby obrócić kamerę. Kółko myszy przybliża, C zmienia kamerę, a E otwiera akcje.</p><p>Każda tura daje 2 ruchy i 2 akcje. Amulety zwiększają liczbę ruchów. Zbieranie, atak, obrona i wytwarzanie kosztują po 1 akcji. Gdy skończysz, wybierz „Koniec tury”.</p></section>
 <section><h3>03 · Wspólna gra na jednym ekranie</h3><p>Wybierz „Podzielony ekran”, ustaw 2–4 graczy i opcjonalnie boty. Każdy ma własny widok, ale gracie kolejno: sterowanie działa dla gracza, którego tura trwa. Kliknięcie lub przeciągnięcie danego widoku wybiera jego kamerę.</p></section>
@@ -477,6 +477,6 @@ function start(humans,bots,m){N=+$('mapSize').value||25;mode=m;auth=true;net=nul
 newGame(Date.now()%1e9,l);show();setPanes(m=="local"?[...Array(humans).keys()]:["cur"]);sync()}
 $("mSolo").onclick=()=>start(1,+$("soloB").value,"solo");
 $("mLocal").onclick=()=>{const h=+$("locH").value;start(h,Math.min(+$("locB").value,4-h),"local")};
-$('mHelp').onclick=()=>$('help').showModal();
+$('mHelp').onclick=()=>{const help=$('help');help.showModal();help.focus({preventScroll:true});help.scrollTop=0;};
 loop();
 </script></body></html>
