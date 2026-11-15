@@ -17,14 +17,14 @@ canvas:active{cursor:grabbing}
 #touchPad button{padding:0;min-width:0;border-radius:12px;background:rgba(12,18,27,.82);border:1px solid #aeb9c8;color:#fff;font-size:21px;touch-action:manipulation;box-shadow:0 3px 12px #0007}
 #touchPad .up{grid-column:2;grid-row:1}#touchPad .left{grid-column:1;grid-row:2}#touchPad .down{grid-column:2;grid-row:3}#touchPad .right{grid-column:3;grid-row:2}
 @media (hover:hover) and (pointer:fine){#touchPad{display:none!important}}
-@media(max-width:650px){#hud{top:66px;left:6px;width:min(142px,40vw);max-height:calc(100vh - 250px)}.pc{padding:4px 5px;font-size:9px}.heart{font-size:10px}#cameraDock button{font-size:11px;padding:8px 9px}#inv{font-size:11px;bottom:calc(var(--bar-height, 95px) + 10px);max-width:calc(100vw - 12px)}#bar{gap:4px;padding:5px 4px calc(6px + env(safe-area-inset-bottom,0px))}#bar button{padding:8px 9px;font-size:12px}}
+@media(max-width:650px){#hud{top:66px;left:6px;width:min(142px,40vw);max-height:calc(100vh - 250px)}.pc{padding:4px 5px;font-size:9px}.heart{font-size:10px}#cameraDock button{font-size:11px;padding:8px 9px}#inv{font-size:11px;bottom:calc(100% + 24px);max-width:calc(100vw - 12px)}#bar{gap:4px;padding:5px 4px calc(6px + env(safe-area-inset-bottom,0px))}#bar button{padding:8px 9px;font-size:12px}}
 @media(max-height:560px){#hud{max-height:calc(100vh - 190px);width:138px}.pc{padding:3px 4px}.hearts{margin:1px 0}}
 #hud{position:fixed;left:10px;top:calc(70px + env(safe-area-inset-top,0px));width:min(180px,32vw);max-height:calc(100vh - 285px);overflow-y:auto;display:flex;flex-direction:column;gap:4px;pointer-events:none;z-index:3;scrollbar-width:thin}
 .pc{background:linear-gradient(135deg,rgba(12,18,27,.78),rgba(28,39,53,.74));border:1px solid #56657a;border-left:3px solid var(--bd);border-radius:7px;padding:4px 6px;font-size:10px;line-height:1.15;box-shadow:0 2px 9px #0006;backdrop-filter:blur(5px)}
 .pc.cur{border-color:var(--ac);box-shadow:0 0 0 1px #e8b23a55,0 2px 9px #0007}
 .hearts{display:flex;gap:2px;margin:2px 0}.heart{color:#ff5365;font-size:11px;text-shadow:0 1px 3px #000}.heart.off{color:#53606e;text-shadow:none}.score{float:right;color:#ffd36c;font-weight:800;font-size:11px}.pc small{font-size:9px;opacity:.88}
 #recipe{position:fixed;right:10px;bottom:90px;width:min(340px,calc(100vw - 20px));z-index:6;background:rgba(12,18,27,.96);border:1px solid #65748b;border-radius:12px;padding:12px;box-shadow:0 10px 30px #000a}#recipe h3{margin:0 0 8px;color:#ffd36c}#recipe .rec{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid #34415c;padding:7px 0;font-size:13px}#recipe button{padding:7px 10px;min-width:88px}
-#inv{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--bar-height, 95px) + 14px);z-index:4;background:rgba(12,18,27,.88);border:1px solid #65748b;border-radius:10px;padding:7px 12px;font-size:13px;white-space:nowrap;max-width:95vw;overflow:auto}
+#inv{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 24px);z-index:4;background:rgba(12,18,27,.88);border:1px solid #65748b;border-radius:10px;padding:7px 12px;font-size:13px;white-space:normal;width:max-content;max-width:calc(100vw - 36px);box-sizing:border-box;display:flex;flex-wrap:wrap;justify-content:center;gap:5px 14px;line-height:1.5;max-height:22vh;overflow:auto}
 #bar{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:7px 8px calc(8px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;flex-wrap:wrap;justify-content:center;align-items:center;background:rgba(12,17,26,.96);border-top:1px solid #39475e;box-shadow:0 -5px 24px #0007}
 #log{flex-basis:100%;text-align:center;font-size:13px;min-height:16px}
 button,select{background:#24304a;color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;font:inherit;cursor:pointer}
@@ -34,32 +34,39 @@ button:disabled{opacity:.4}button.pri{background:var(--ac);color:#111;font-weigh
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
 #menu button{min-width:260px}.hide{display:none!important}
 input{background:#24304a;color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:10px;font:inherit;width:120px;text-align:center}
+
+#inv span{white-space:nowrap}#bossHud{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:10px;width:min(340px,calc(100vw - 220px));z-index:4;padding:7px 10px;border:1px solid #996d59;border-radius:8px;background:#19151ce8;font-size:11px;box-sizing:border-box}#bossHud progress{display:block;width:100%;height:8px;accent-color:#c55046;margin:4px 0}#bossHud small{color:#f0c68c}#recipe{bottom:calc(var(--bar-height,95px) + var(--inv-height,60px) + 36px);max-height:45vh;overflow:auto;box-sizing:border-box}#touchPad{bottom:calc(var(--bar-height,95px) + var(--inv-height,60px) + 40px)}#hud{max-height:calc(100dvh - var(--bar-height,95px) - var(--inv-height,60px) - 110px);pointer-events:auto}
+@media(max-width:650px){#inv{bottom:calc(100% + 24px);font-size:11px;padding:6px 9px;gap:2px 10px}#bar button{padding:7px 8px;font-size:12px}#log{font-size:11px}#hud{width:142px}#bossHud{width:calc(100vw - 168px);font-size:10px}#touchPad{width:106px;height:106px}#recipe{max-height:40dvh}}
+#help{width:min(680px,calc(100vw - 36px));max-height:85dvh;box-sizing:border-box;border:1px solid #68734e;border-radius:18px;padding:0;background:#131e23;color:#e7ede6;text-align:left;overflow:auto;touch-action:pan-y;user-select:text;box-shadow:0 24px 90px #000b}#help::backdrop{background:#02090dcc;backdrop-filter:blur(6px)}#help header{padding:28px;background:linear-gradient(135deg,#304a38,#172932)}#help header span{font-size:11px;letter-spacing:3px;color:#e8b23a}#help h2{font-size:28px;line-height:1.2;margin:12px 0}#help p{line-height:1.65;font-size:14px;color:#c8d3cd}#help section{margin:0 26px;padding:12px 0;border-bottom:1px solid #34463d}#help h3{font-size:17px;color:#e8c47a}#help form{padding:22px;text-align:center}#help button{min-width:0;width:100%}
 </style></head><body>
-<div id="hud" class="hide"></div><div id="inv" class="hide"></div>
+<div id="bossHud" class="hide"></div>
+<div id="hud" class="hide"></div>
 <div id="cameraDock" class="hide"><button id="bCam" title="Zmień kamerę (C)">Kamera: 3. osoba · C</button></div>
 <div id="touchPad" class="hide" aria-label="Sterowanie dotykowe">
   <button data-move="w" class="up">▲</button><button data-move="a" class="left">◀</button>
   <button data-move="s" class="down">▼</button><button data-move="d" class="right">▶</button>
 </div>
 <div id="recipe" class="hide"><h3>Akcje i wytwarzanie [E]</h3><div id="recipeList"></div><button onclick="document.getElementById('recipe').classList.add('hide')">Zamknij</button></div>
-<div id="bar" class="hide"><div id="log"></div>
-<button id="bCol">Zbierz</button><button id="bInteract">Akcje [E]</button><button id="bCr">Szybkie wytwarzanie</button><button id="bHe">Ulecz</button><button id="bEat">Zjedz mięso</button><button id="bFight">Atakuj</button><button id="bEnd" class="pri">Koniec tury</button><button id="bMenu">Menu</button></div>
+<div id="bar" class="hide"><div id="inv" class="hide" aria-label="Zasoby aktywnego gracza"></div><div id="log" role="status"></div>
+<button id="bCol">Zbierz</button><button id="bInteract">Akcje [E]</button><button id="bCr">Szybkie wytwarzanie</button><button id="bHe">Ulecz</button><button id="bEat">Zjedz mięso</button><button id="bFight">Atakuj</button><button id="bShoot">Strzel z łuku</button><button id="bGuard">Obrona</button><button id="bEnd" class="pri">Koniec tury</button><button id="bMenu">Menu</button></div>
 <div id="menu">
-<h1>ARX</h1><div style="opacity:.8;max-width:420px">Przygodowa gra turowa 3D o zasobach, potworach i amuletach. Widok z trzeciej osoby; ruch WASD lub klikaniem. Przytrzymaj LPM i przeciągnij, aby obrócić kamerę; C zmienia widok. Mapa 25×25 pól (rozmiar można zmienić). Pokonaj bossa (+15 pkt), a wygra gracz z największą liczbą punktów. Tura: 2 ruchy i 2 akcje. Multiplayer online bez logowania – przez kod pokoju.</div>
+<h1>ARX</h1><p style="max-width:420px;margin:0 0 12px;line-height:1.5;color:#c8d3cd">Turowa przygoda 3D: zbieraj zasoby, twórz wyposażenie i pokonaj bossa. Graj solo z botami lub wspólnie na podzielonym ekranie.</p>
 <div class="row"><label for="mapSize">Rozmiar mapy:</label><select id="mapSize"><option value="25" selected>25 × 25</option><option value="35">35 × 35</option><option value="50">50 × 50</option></select></div>
 <div class="row"><button id="mSolo" class="pri">Solo vs boty</button><select id="soloB"><option>1</option><option selected>2</option><option>3</option></select></div>
 <div class="row"><button id="mLocal">Podzielony ekran (WASD / strzałki)</button><select id="locH"><option>2</option><option>3</option><option>4</option></select><select id="locB"><option value="0">bez botów</option><option value="1">+1 bot</option><option value="2">+2 boty</option></select></div>
-<div class="row"><button id="mNet">Zagraj ze znajomym (online)</button></div>
-<div class="row"><input id="code" placeholder="kod gry" maxlength="12"><button id="mJoin">Dołącz kodem</button></div>
-<div id="lobby" class="hide"><div>Kod gry: <b id="lc" style="font-size:22px;color:var(--ac)"></b></div>
-<div style="max-width:420px;opacity:.85;font-size:13px">Nie trzeba zakładać konta ani się logować. Obie osoby muszą otworzyć tę samą opublikowaną wersję gry przez HTTPS (nie plik z dysku). Gospodarz tworzy pokój, kopiuje link i wysyła go znajomemu. Połączenie działa przez WebRTC; obie osoby muszą mieć internet.</div>
-<div>Gracze w pokoju: <b id="lp">1/2</b></div><div id="netStatus" style="font-size:13px;color:#e8b23a">Uruchamianie połączenia…</div><button id="bCopyInvite">Kopiuj link zaproszenia</button>
-<div class="row" id="lh"><select id="netB"><option value="0">bez botów</option><option value="1">+1 bot</option><option value="2">+2 boty</option></select><button id="bStart" class="pri">Start</button></div>
-<div id="lw" class="hide">Czekam, aż gospodarz rozpocznie grę…</div></div>
+<button id="mHelp">Instrukcja</button>
+<dialog id="help" aria-labelledby="helpTitle" tabindex="-1"><header><span>PRZEWODNIK PO ARX</span><h2 id="helpTitle">Twoja przygoda zaczyna się tutaj</h2><p>Zbieraj zasoby, rozwijaj wyposażenie i przygotuj się na spotkanie ze Strażnikiem Pól.</p></header>
+<section><h3>01 · Cel gry</h3><p>Pokonanie bossa w centrum mapy daje 15 punktów i kończy rozgrywkę. Wygrywa gracz z największą liczbą punktów. Zasoby i potwory także dają punkty.</p></section>
+<section><h3>02 · Sterowanie i tury</h3><p>Ruszaj się klawiszami WASD, strzałkami lub przyciskami dotykowymi. Kliknij sąsiednie pole, aby przejść, zebrać zasób pod sobą albo zaatakować. Przeciągnij widok, aby obrócić kamerę. Kółko myszy przybliża, C zmienia kamerę, a E otwiera akcje.</p><p>Każda tura daje 2 ruchy i 2 akcje. Amulety zwiększają liczbę ruchów. Zbieranie, atak, obrona i wytwarzanie kosztują po 1 akcji. Gdy skończysz, wybierz „Koniec tury”.</p></section>
+<section><h3>03 · Wspólna gra na jednym ekranie</h3><p>Wybierz „Podzielony ekran”, ustaw 2–4 graczy i opcjonalnie boty. Każdy ma własny widok, ale gracie kolejno: sterowanie działa dla gracza, którego tura trwa. Kliknięcie lub przeciągnięcie danego widoku wybiera jego kamerę.</p></section>
+<section><h3>04 · Zasoby i wyposażenie</h3><p>Drewno, kamień, ruda i zioła służą do wytwarzania. Wszystkie receptury i ich koszty znajdziesz w „Akcje [E]”. Miecz zwiększa siłę ataku, pancerz zmniejsza obrażenia, a kilof podwaja wydobycie kamienia i rudy. Każde naturalne złoże zbierzesz tylko raz.</p></section>
+<section><h3>05 · Przetrwanie i uprawa</h3><p>Zioła leczą. Ze zwierząt zdobędziesz mięso: surowe przywraca 3 zdrowia, pieczeń 6. Zbuduj ognisko, aby piec mięso i odpoczywać. Ogniska pozostają na mapie dla wszystkich.</p><p>Na wolnym polu zasadź zioła za 1 drewno i 1 zioło. Po zakończeniu dwóch własnych tur wróć i użyj „Zbierz”, aby otrzymać 3 zioła bez dodatkowych punktów.</p></section>
+<section><h3>06 · Walka i boss</h3><p>Obrona zmniejsza obrażenia o 2 do następnej własnej tury (minimum 1). Sidła założone na sąsiedniego potwora dodają 4 obrażenia do kolejnego trafienia, po czym znikają.</p><p>Łuk sięga na 3 pola i zużywa strzały. Przycisk strzału wybiera najbliższego potwora; kliknięcie celu odległego o 2–3 pola pozwala wybrać go samodzielnie. Z dystansu potwór nie kontratakuje.</p><p>Strażnik ma 60 zdrowia. Czerwone pola zapowiadają uderzenie: opuść je lub przygotuj obronę przed końcem tury. Przy połowie zdrowia boss wpada w furię i uderza mocniej.</p></section>
+<section><h3>07 · Śmierć i granice świata</h3><p>Po śmierci wracasz na start z 5 zdrowia, tracisz miecz, pancerz, łuk i ulepszenia ataku oraz opuszczasz następną turę. Zwycięzca walki z graczem otrzymuje jedną trzecią jego materiałów i jedzenia.</p><p>Słupki wyznaczają granicę gry. Pagórki i góry za nimi są krajobrazem. Rozmiar planszy wybierasz przed startem.</p></section>
+<form method="dialog"><button class="pri">Wróć do menu</button></form></dialog>
 <div id="err" style="color:#f08080"></div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js'"></script>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js'"></script>
 <script>
 const $=id=>document.getElementById(id);let N=25;const COL=[0xe8b23a,0x4aa3ff,0xff6b6b,0x6bdc8b],H={g:.3,f:.35,m:.9,w:.1},TC={g:0x5a9a4a,f:0x2f6b3a,m:0x7b7f8a,w:0x2a5a9a};
 const RC={wood:0x8b5a2b,stone:0xb0b4bd,ore:0xd9a21b,herb:0xe85fd0},RN={wood:"drewno",stone:"kamień",ore:"rudę",herb:"zioła"};
@@ -67,32 +74,49 @@ function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t
 function genMap(seed){const r=rng(seed),T=[];for(let y=0;y<N;y++)for(let x=0;x<N;x++){const c=r(),cr=Math.min(x,N-1-x)<2&&Math.min(y,N-1-y)<2;let t='g',res=null,mon=0,animal=null;
 // Zasoby leżą na jednym, ciągłym terenie — typy pól nie tworzą ścian ani urwisk.
 if(!cr){if(c>=.1&&c<.28)res='wood';else if(c>=.28&&c<.4)res=r()<.5?'stone':'ore';else if(c>=.4&&c<.5)res='herb';else if(c>=.5&&c<.525)mon=1}
-if(!cr&&!mon&&!res&&r()<.018)animal=r()<.5?'pig':'cow';if(x===Math.floor(N/2)&&y===Math.floor(N/2)){t='g';res=null;mon=2;animal=null}T.push({t,res,mon,animal})}return T}
+if(!cr&&!mon&&!res&&r()<.018)animal=r()<.5?'pig':'cow';if(x===Math.floor(N/2)&&y===Math.floor(N/2)){t='g';res=null;mon=2;animal=null}if(Math.abs(x-Math.floor(N/2))<=2&&Math.abs(y-Math.floor(N/2))<=2){res=null;animal=null;if(mon!==2)mon=0}T.push({t,res,mon,animal})}return T}
 let S,MAP,net=null,myPeer=null,panes=[],mode='',auth=true,botT=0,peers=[];
 const key=(x,y)=>y*N+x,inb=(x,y)=>x>=0&&y>=0&&x<N&&y<N;
 const mhp=k=>S.mhp[k]??(MAP[k].mon==2?60:12),ahp=k=>S.ahp[k]??(MAP[k].animal=='cow'?7:5),alive=(x,y)=>inb(x,y)&&MAP[key(x,y)].mon&&mhp(key(x,y))>0;
 const D=(a,b,c,d)=>Math.abs(a-c)+Math.abs(b-d);
-function newGame(seed,list){MAP=genMap(seed);S={seed,turn:0,m:2,a:2,taken:{},mhp:{},ahp:{},log:"Start gry!",win:-1,pl:list.map((p,i)=>({...p,x:[0,N-1,0,N-1][i],y:[0,N-1,N-1,0][i],hp:10,atk:0,am:0,dir:{x:0,z:1},pts:0,weapon:0,armor:0,inv:{wood:0,stone:0,ore:0,herb:0,meat:0}}))}}
+function newGame(seed,list){MAP=genMap(seed);S={seed,turn:0,m:2,a:2,camps:{},gardens:{},traps:{},completedTurns:list.map(()=>0),bossWarning:false,taken:{},mhp:{},ahp:{},log:"Start gry!",win:-1,pl:list.map((p,i)=>({...p,x:[0,N-1,0,N-1][i],y:[0,N-1,N-1,0][i],hp:10,atk:0,am:0,dir:{x:0,z:1},pts:0,weapon:0,armor:0,pickaxe:0,bow:false,guard:false,inv:{wood:0,stone:0,ore:0,herb:0,meat:0,cooked:0,arrows:0}}))}}
 function die(p,i,killerIndex=null){
  const spawnX=[0,N-1,0,N-1][i],spawnY=[0,N-1,N-1,0][i],killer=Number.isInteger(killerIndex)?S.pl[killerIndex]:null,loot={};
- if(killer&&killer!==p){for(const r of ["wood","stone","ore","herb","meat"]){const amount=Math.floor((p.inv[r]||0)/3);if(amount>0){p.inv[r]-=amount;killer.inv[r]=(killer.inv[r]||0)+amount;loot[r]=amount}}}
- p.x=spawnX;p.y=spawnY;p.hp=5;p.weapon=0;p.armor=0;p.atk=0;p.skipTurns=(p.skipTurns||0)+1;
+ if(killer&&killer!==p){for(const r of ["wood","stone","ore","herb","meat","cooked"]){const amount=Math.floor((p.inv[r]||0)/3);if(amount>0){p.inv[r]-=amount;killer.inv[r]=(killer.inv[r]||0)+amount;loot[r]=amount}}}
+ p.x=spawnX;p.y=spawnY;p.hp=5;p.weapon=0;p.armor=0;p.atk=0;p.guard=false;p.bow=false;p.skipTurns=(p.skipTurns||0)+1;
  if(i===S.turn){S.m=0;S.a=0;}
- const summary=Object.entries(loot).map(([r,n])=>n+" "+({wood:"drewna",stone:"kamienia",ore:"rudy",herb:"ziół",meat:"mięsa"}[r])).join(", ");
+ const summary=Object.entries(loot).map(([r,n])=>n+" "+({wood:"drewna",stone:"kamienia",ore:"rudy",herb:"ziół",meat:"mięsa",cooked:"pieczeń"}[r])).join(", ");
  S.log=p.name+" ginie, wraca na start, traci miecz i pancerz oraz opuści następną turę"+(killer&&killer!==p?". "+killer.name+" otrzymuje 1/3 materiałów"+(summary?": "+summary:"."):".");
 }
-function nextTurn(){let guard=0;do{S.turn=(S.turn+1)%S.pl.length;guard++;}while(S.pl[S.turn].skipTurns>0&&guard<=S.pl.length&&(S.pl[S.turn].skipTurns--,true));S.m=2+S.pl[S.turn].am;S.a=2;S.log=S.pl[S.turn].skipTurns===0&&guard>1?"Tura pominięta po śmierci. Teraz: "+S.pl[S.turn].name:"Tura: "+S.pl[S.turn].name}
+function nextTurn(){
+ S.completedTurns[S.turn]++;const mid=Math.floor(N/2),bk=key(mid,mid),p=S.pl[S.turn];let event='';
+ if(alive(mid,mid)){
+  if(S.bossWarning){
+   if(D(p.x,p.y,mid,mid)<=2){const damage=Math.max(1, (mhp(bk)<=30?6:4)-(p.armor||0)-(p.guard?2:0));p.hp-=damage;event=' Strażnik uderza w ziemię: '+damage+' obrażeń!';if(p.hp<=0){die(p,S.turn);event=' '+S.log;}}
+   S.bossWarning=false;
+  }else if(S.pl.some(q=>D(q.x,q.y,mid,mid)<=3)){S.bossWarning=true;event=' Strażnik szykuje uderzenie! Opuść czerwone pola lub użyj obrony.';}
+ }
+ let guard=0;do{S.turn=(S.turn+1)%S.pl.length;guard++;}while(S.pl[S.turn].skipTurns>0&&guard<=S.pl.length&&(S.pl[S.turn].skipTurns--,true));S.pl[S.turn].guard=false;S.m=2+S.pl[S.turn].am;S.a=2;S.log=S.pl[S.turn].skipTurns===0&&guard>1?"Tura pominięta po śmierci. Teraz: "+S.pl[S.turn].name:"Tura: "+S.pl[S.turn].name;S.log+=event}
+function gardenReady(k){const g=S.gardens[k];return !!g&&S.completedTurns[g.owner]>=g.ready}
+function monsterTargets(p,range){const targets=[];for(let y=Math.max(0,p.y-range);y<=Math.min(N-1,p.y+range);y++)for(let x=Math.max(0,p.x-range);x<=Math.min(N-1,p.x+range);x++)if(D(p.x,p.y,x,y)<=range&&alive(x,y))targets.push({x,y});return targets.sort((a,b)=>D(p.x,p.y,a.x,a.y)-D(p.x,p.y,b.x,b.y))}
+function canPlant(p){const k=key(p.x,p.y);return (!MAP[k].res||S.taken[k])&&!MAP[k].mon&&!MAP[k].animal&&!S.camps[k]&&!S.gardens[k]}
 function apply(c){if(S.win>=0)return;const i=S.turn,p=S.pl[i],k=key(p.x,p.y);
 if(c.t=="move"){if(!inb(c.x,c.y)||S.m<1||D(c.x,c.y,p.x,p.y)!=1||alive(c.x,c.y)||S.pl.some((q,j)=>j!==i&&q.hp>0&&q.x===c.x&&q.y===c.y))return;p.dir={x:c.x-p.x,z:c.y-p.y};p.x=c.x;p.y=c.y;S.m--}
-else if(c.t=="col"){const t=MAP[k];if(S.a<1||!t.res||S.taken[k])return;S.taken[k]=1;p.inv[t.res]++;p.pts+=t.res=="ore"?2:1;S.a--;S.log=p.name+" zbiera "+RN[t.res]}
-else if(c.t=="att"){if(S.a<1||!inb(c.x,c.y)||D(c.x,c.y,p.x,p.y)!=1||!alive(c.x,c.y))return;const mk=key(c.x,c.y),boss=MAP[mk].mon==2,d=Math.ceil((1+Math.floor(Math.random()*6))/2)+p.atk+(p.weapon||0);S.mhp[mk]=mhp(mk)-d;S.a--;
+else if(c.t==="plant"){if(S.a<1||p.inv.herb<1||p.inv.wood<1||!canPlant(p))return;p.inv.herb--;p.inv.wood--;S.gardens[k]={owner:i,ready:S.completedTurns[i]+2};S.a--;S.log="Zasadzono zioła. Po końcu 2 Twoich tur zbierz 3 zioła (bez punktów)."}
+else if(c.t==="trap"){const target=monsterTargets(p,1).find(q=>!S.traps[key(q.x,q.y)]);if(S.a<1||p.inv.wood<2||p.inv.stone<1||!target)return;p.inv.wood-=2;p.inv.stone--;S.traps[key(target.x,target.y)]=true;S.a--;S.log="Założono sidła: następny cios w tego potwora zada dodatkowe 4 obrażenia."}
+else if(c.t==="col"&&S.gardens[k]){if(S.a<1||!gardenReady(k))return;p.inv.herb+=3;delete S.gardens[k];S.a--;S.log="Zebrano 3 wyhodowane zioła."}
+else if(c.t=="col"){const t=MAP[k];if(S.a<1||!t.res||S.taken[k])return;S.taken[k]=1;const amount=(t.res==='stone'||t.res==='ore')&&p.pickaxe?2:1;p.inv[t.res]+=amount;p.pts+=t.res=="ore"?2:1;S.a--;S.log=p.name+" zbiera "+RN[t.res]+(amount>1?" ×2 (kilof)":"")}
+else if(c.t==="att"||c.t==="shot"){const shot=c.t==="shot",dist=D(c.x,c.y,p.x,p.y);if(S.a<1||!inb(c.x,c.y)||!alive(c.x,c.y)||(shot?(!p.bow||p.inv.arrows<1||dist<1||dist>3):dist!==1))return;const mk=key(c.x,c.y),boss=MAP[mk].mon==2,trapped=!!S.traps[mk],d=(shot?3:Math.ceil((1+Math.floor(Math.random()*6))/2)+(p.weapon||0))+p.atk+(trapped?4:0);if(shot)p.inv.arrows--;if(trapped)delete S.traps[mk];S.mhp[mk]=mhp(mk)-d;S.a--;
 if(S.mhp[mk]<=0){p.pts+=boss?15:3;let am=boss||Math.random()<.4;if(am)p.am++;MAP[mk].mon=0;S.log=p.name+" pokonuje "+(boss?"BOSSA (+15 pkt)":"potwora")+(am?" i zdobywa amulet (+1 ruch)!":"!");if(boss){S.bossDefeated=true;S.win=S.pl.reduce((best,q,j)=>q.pts>S.pl[best].pts?j:best,0);S.log="BOSS POKONANY! Zwycięża "+S.pl[S.win].name+" z wynikiem "+S.pl[S.win].pts+" pkt!"}}
-else{S.log=p.name+" zadaje "+d+" obrażeń.";if(Math.random()<(boss?.75:.5)){p.hp-=Math.max(1,(boss?4:2)-(p.armor||0));S.log+=", potwór kontratakuje";if(p.hp<=0)die(p,i)}}}
-else if(c.t=="pvp"){const q=S.pl[c.i];if(S.a<1||!q||q===p||q.hp<=0||D(q.x,q.y,p.x,p.y)!=1)return;const d=2+(p.atk||0)+(p.weapon||0);q.hp-=Math.max(1,d-(q.armor||0));S.a--;S.log=p.name+" atakuje gracza "+q.name+" za "+d+" obrażeń!";if(q.hp<=0){p.pts+=2;S.log+=" Pokonanie gracza: +2 pkt. ";die(q,c.i,i)}}
+else{S.log=p.name+" zadaje "+d+" obrażeń.";if(dist===1&&Math.random()<(boss?.75:.5)){p.hp-=Math.max(1,(boss?(mhp(mk)<=30?5:4):2)-(p.armor||0)-(p.guard?2:0));S.log+=", potwór kontratakuje";if(p.hp<=0)die(p,i)}}}
+else if(c.t=="pvp"){const q=S.pl[c.i];if(S.a<1||!q||q===p||q.hp<=0||D(q.x,q.y,p.x,p.y)!=1)return;const d=2+(p.atk||0)+(p.weapon||0);q.hp-=Math.max(1,d-(q.armor||0)-(q.guard?2:0));S.a--;S.log=p.name+" atakuje gracza "+q.name+" za "+d+" obrażeń!";if(q.hp<=0){p.pts+=2;S.log+=" Pokonanie gracza: +2 pkt. ";die(q,c.i,i)}}
 else if(c.t=="animal"){const mk=key(c.x,c.y);if(S.a<1||!MAP[mk].animal||D(c.x,c.y,p.x,p.y)>1)return;const d=2+(p.atk||0)+(p.weapon||0);S.ahp[mk]=ahp(mk)-d;S.a--;if(S.ahp[mk]<=0){p.inv.meat+=(MAP[mk].animal=='cow'?3:2);MAP[mk].animal=null;S.log="Zdobywasz mięso ze zwierzęcia."}else S.log="Zwierzę otrzymuje "+d+" obrażeń."}
-else if(c.t=="eat"){if(S.a<1||p.inv.meat<1||p.hp>=10)return;p.inv.meat--;p.hp=Math.min(10,p.hp+3);S.a--;S.log=p.name+" zjada mięso i odzyskuje zdrowie."}
-else if(c.t=="craftType"){if(S.a<1)return;if(c.what=="sword"&&p.inv.wood>=2&&p.inv.ore>=2){p.inv.wood-=2;p.inv.ore-=2;p.weapon++;S.log="Wytworzono żelazny miecz (+1 obrażeń)."}else if(c.what=="armor"&&p.inv.wood>=1&&p.inv.stone>=3&&p.inv.ore>=1){p.inv.wood--;p.inv.stone-=3;p.inv.ore--;p.armor++;S.log="Wytworzono pancerz (+1 obrony)."}else if(c.what=="potion"&&p.inv.herb>=3){p.inv.herb-=3;p.hp=Math.min(10,p.hp+5);S.log="Uwarzono miksturę (+5 serc)."}else return;S.a--;}
-else if(c.t=="camp"){if(S.a<1||p.inv.wood<2||p.inv.stone<1||p.hp>=10)return;p.inv.wood-=2;p.inv.stone--;p.hp=Math.min(10,p.hp+4);S.a--;S.log=p.name+" rozpala ognisko i odpoczywa (+4 zdrowia)."}
+else if(c.t=="guard"){if(S.a<1||p.guard)return;p.guard=true;S.a--;S.log=p.name+" przyjmuje postawę obronną (−2 obrażeń do następnej tury)."}
+else if(c.t=="cook"){if(S.a<1||!S.camps[k]||p.inv.meat<1)return;p.inv.meat--;p.inv.cooked=(p.inv.cooked||0)+1;S.a--;S.log="Upieczono mięso: leczy 6 zdrowia zamiast 3."}
+else if(c.t=="eat"){const cooked=(p.inv.cooked||0)>0;if(S.a<1||(!cooked&&p.inv.meat<1)||p.hp>=10)return;p.inv[cooked?'cooked':'meat']--;p.hp=Math.min(10,p.hp+(cooked?6:3));S.a--;S.log=p.name+(cooked?" zjada pieczeń (+6 zdrowia).":" zjada surowe mięso (+3 zdrowia).")}
+else if(c.t=="craftType"){if(S.a<1)return;if(c.what==="bow"&&!p.bow&&p.inv.wood>=3&&p.inv.ore>=1){p.inv.wood-=3;p.inv.ore--;p.bow=true;S.log="Wytworzono łuk. Zasięg 3 pola; strzały wytworzysz osobno."}else if(c.what==="arrows"&&p.inv.wood>=1&&p.inv.stone>=1){p.inv.wood--;p.inv.stone--;p.inv.arrows+=4;S.log="Wytworzono 4 strzały."}else if(c.what==="pickaxe"&&!p.pickaxe&&p.inv.wood>=2&&p.inv.stone>=2){p.inv.wood-=2;p.inv.stone-=2;p.pickaxe=1;S.log="Wytworzono kilof: podwójne wydobycie kamienia i rudy."}else if(c.what=="sword"&&p.inv.wood>=2&&p.inv.ore>=2){p.inv.wood-=2;p.inv.ore-=2;p.weapon++;S.log="Wytworzono żelazny miecz (+1 obrażeń)."}else if(c.what=="armor"&&p.inv.wood>=1&&p.inv.stone>=3&&p.inv.ore>=1){p.inv.wood--;p.inv.stone-=3;p.inv.ore--;p.armor++;S.log="Wytworzono pancerz (+1 obrony)."}else if(c.what=="potion"&&p.inv.herb>=3){p.inv.herb-=3;p.hp=Math.min(10,p.hp+5);S.log="Uwarzono miksturę (+5 serc)."}else return;S.a--;}
+else if(c.t=="camp"){if(S.a<1||p.inv.wood<2||p.inv.stone<1||S.camps[k]||S.gardens[k])return;p.inv.wood-=2;p.inv.stone--;S.camps[k]=true;p.hp=Math.min(10,p.hp+4);S.a--;S.log=p.name+" buduje ognisko (+4 zdrowia). Można tu piec mięso i odpoczywać."}
+else if(c.t=="rest"){if(S.a<1||!S.camps[k]||p.hp>=10)return;p.hp=Math.min(10,p.hp+2);S.a--;S.log=p.name+" odpoczywa przy ognisku (+2 zdrowia)."}
 else if(c.t=="craft"){if(S.a<1||p.inv.wood<2||p.inv.ore<1)return;p.inv.wood-=2;p.inv.ore--;p.atk++;S.a--;S.log=p.name+" wytwarza lepszą broń (+1)"}
 else if(c.t=="heal"){if(S.a<1||p.inv.herb<2||p.hp>=10)return;p.inv.herb-=2;p.hp=Math.min(10,p.hp+3);S.a--;S.log=p.name+" leczy się"}
 else if(c.t=="end")nextTurn();else return;
@@ -106,7 +130,9 @@ function bot(){
  if(S.a>0){
   // Przetrwanie ma pierwszeństwo przed zbieraniem punktów.
   if(p.hp<=4&&p.inv.herb>=2)return{t:'heal'};
-  if(p.hp<=7&&p.inv.meat>0)return{t:'eat'};
+  if(p.hp<=7&&(p.inv.meat>0||p.inv.cooked>0))return{t:'eat'};
+  if(S.bossWarning&&D(p.x,p.y,Math.floor(N/2),Math.floor(N/2))<=2&&!p.guard&&S.m===0)return{t:'guard'};
+  if(!p.pickaxe&&p.inv.wood>=2&&p.inv.stone>=2)return{t:'craftType',what:'pickaxe'};
   if(here.res&&!S.taken[k])return{t:'col'};
   // Bot rozwija wyposażenie, ale nie marnuje akcji na duplikaty bez potrzeby.
   if(p.weapon<2&&p.inv.wood>=2&&p.inv.ore>=2)return{t:'craftType',what:'sword'};
@@ -160,23 +186,23 @@ function bot(){
  }
  return{t:'end'};
 }
-function tick(){if(!S||S.win>=0||!auth||botT||!S.pl[S.turn].bot)return;botT=setTimeout(()=>{botT=0;apply(bot()||{t:"end"});sync();tick()},2200+Math.floor(Math.random()*500))}
-function sync(){draw();if(net&&net.host)sendState();tick()}
+function tick(){if(!S||S.win>=0||!auth||botT||!S.pl[S.turn].bot)return;botT=setTimeout(()=>{botT=0;apply(bot()||{t:"end"});sync();tick()},1200+Math.floor(Math.random()*300))}
+function sync(){draw();tick()}
 function canAct(){if(!S||S.win>=0)return false;const p=S.pl[S.turn];return p.bot?false:net?p.peer===net.localPlayerId:true}
-function act(c){if(!canAct())return;if(net&&!net.host){if(net.conn&&net.conn.open)net.conn.send({type:"cmd",c});else setNetStatus("Brak połączenia z gospodarzem.")}else{apply(c);sync()}}
+function act(c){if(!canAct())return;apply(c);sync()}
 // ---- 3D
 if(!window.THREE){
   $("err").textContent="Nie udało się załadować silnika 3D. Sprawdź połączenie z internetem i odśwież stronę. Gra pobiera Three.js z CDN.";
-  ["mSolo","mLocal","mNet","mJoin"].forEach(id=>$(id).disabled=true);
+  ["mSolo","mLocal"].forEach(id=>$(id).disabled=true);
   throw new Error("Three.js failed to load from both CDN sources");
 }
 let R;
 try {
   R=new THREE.WebGLRenderer({antialias:true});
-  R.setPixelRatio(Math.min(devicePixelRatio,1.75));R.setClearColor(0x9bb9c6);R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.12;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;R.setScissorTest(true);document.body.prepend(R.domElement);
+  R.setPixelRatio(Math.min(devicePixelRatio,1.75));R.setClearColor(0x9bb9c6);R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.0;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;R.setScissorTest(true);document.body.prepend(R.domElement);
 } catch(err) {
   $("err").textContent="Twoja przeglądarka nie uruchomiła WebGL. Włącz akcelerację sprzętową albo otwórz grę w aktualnym Chrome/Edge.";
-  ["mSolo","mLocal","mNet","mJoin"].forEach(id=>$(id).disabled=true);
+  ["mSolo","mLocal"].forEach(id=>$(id).disabled=true);
   throw err;
 }
 // Three.js r128 nie posiada wbudowanej CapsuleGeometry. Dodajemy zgodny zamiennik z LatheGeometry.
@@ -199,24 +225,32 @@ if(typeof THREE.CapsuleGeometry==="undefined"){
     }
   };
 }
-const sc=new THREE.Scene();sc.add(new THREE.HemisphereLight(0xe5f1ff,0x263d2b,.82));const fillLight=new THREE.DirectionalLight(0xb4d2e4,.28);fillLight.position.set(-8,5,-6);sc.add(fillLight);const dl=new THREE.DirectionalLight(0xffe6bd,2.15);dl.position.set(-9,20,11);dl.castShadow=true;dl.shadow.mapSize.set(3072,3072);dl.shadow.bias=-0.00018;dl.shadow.normalBias=.025;dl.shadow.radius=3;{const c=dl.shadow.camera;c.left=-72;c.right=72;c.top=72;c.bottom=-72;c.near=.5;c.far=190;c.updateProjectionMatrix()}sc.add(dl);sc.background=new THREE.Color(0x9bb9c6);sc.fog=new THREE.Fog(0x9bb9c6,48,105);
+// Dispose geometry created for a previous turn; shared materials stay cached.
+function clearGroup(group){const sharedGeometry=new Set([...Object.values(G),IC,TR,leafGeo]);const sharedMaterials=new Set([...Object.values(mats),groundMaterial,...GR,BR,ST,OR,...heartMaterialCache.values()]);const geometries=new Set(),materials=new Set();group.traverse(o=>{if(o.geometry&&!sharedGeometry.has(o.geometry))geometries.add(o.geometry);for(const m of (Array.isArray(o.material)?o.material:[o.material]))if(m&&!sharedMaterials.has(m))materials.add(m)});group.clear();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose())}
+const sc=new THREE.Scene();sc.add(new THREE.HemisphereLight(0xe5f1ff,0x263d2b,.82));const fillLight=new THREE.DirectionalLight(0xb4d2e4,.28);fillLight.position.set(-8,5,-6);sc.add(fillLight);const dl=new THREE.DirectionalLight(0xffe6bd,1.4);dl.position.set(-9,20,11);dl.castShadow=true;dl.shadow.mapSize.set(3072,3072);dl.shadow.bias=-0.00018;dl.shadow.normalBias=.025;dl.shadow.radius=3;{const c=dl.shadow.camera;c.left=-72;c.right=72;c.top=72;c.bottom=-72;c.near=.5;c.far=190;c.updateProjectionMatrix()}sc.add(dl);sc.background=new THREE.Color(0x9bb9c6);sc.fog=new THREE.Fog(0x9bb9c6,48,105);
 const tiles=new THREE.Group(),dyn=new THREE.Group();let gridTiles=null;sc.add(tiles,dyn);
-const mats={},mt=c=>mats[c]||(mats[c]=new THREE.MeshLambertMaterial({color:c})),G={box:new THREE.BoxGeometry(.96,1,.96),cone:new THREE.ConeGeometry(.28,.8,7),rock:new THREE.DodecahedronGeometry(.25),sph:new THREE.SphereGeometry(.3,12,10),cyl:new THREE.CylinderGeometry(.2,.25,.7,10),herb:new THREE.OctahedronGeometry(.18)};
+const mats={},mt=c=>mats[c]||(mats[c]=new THREE.MeshLambertMaterial({color:new THREE.Color(c).convertSRGBToLinear()})),G={box:new THREE.BoxGeometry(.96,1,.96),cone:new THREE.ConeGeometry(.28,.8,7),rock:new THREE.DodecahedronGeometry(.25),sph:new THREE.SphereGeometry(.3,12,10),cyl:new THREE.CylinderGeometry(.2,.25,.7,10),herb:new THREE.OctahedronGeometry(.18)};
 const W=(x,y)=>[x-N/2+.5,y-N/2+.5];
-function terrainHeight(x,z){return .035*Math.sin(x*.47+1.2)*Math.cos(z*.39-.6)+.018*Math.sin((x-z)*.72)}
+function terrainHeight(x,z){
+ const base=.035*Math.sin(x*.47+1.2)*Math.cos(z*.39-.6)+.018*Math.sin((x-z)*.72);
+ const outside=Math.max(0,Math.max(Math.abs(x),Math.abs(z))-N/2-2),blend=Math.min(1,outside/14),smooth=blend*blend*(3-2*blend);
+ const hills=2.5+2*Math.sin(x*.09+.6)*Math.cos(z*.08),ridge=Math.pow(Math.abs(Math.sin(x*.045+z*.038)),3),mountains=14*ridge+3*Math.sin(z*.16)*Math.sin(x*.12);
+ return base+smooth*(hills+Math.min(1,outside/32)*mountains);
+}
 const TILE_TOP=.025,TILE_HEIGHT=.06;
 function groundAtCell(x,y){const [a,b]=W(x,y);return terrainHeight(a,b)+TILE_TOP}
 function makeGroundTexture(){const c=document.createElement('canvas');c.width=c.height=1024;const ctx=c.getContext('2d');ctx.fillStyle='#526f3e';ctx.fillRect(0,0,1024,1024);const r=rng(7431);
 for(let i=0;i<15000;i++){const v=r();ctx.globalAlpha=.035+r()*.12;ctx.fillStyle=v>.56?'#a0a56a':v>.28?'#314c2e':'#233c26';const w=1+r()*7,h=1+r()*4;ctx.beginPath();ctx.ellipse(r()*1024,r()*1024,w,h,r()*Math.PI,0,Math.PI*2);ctx.fill()}
 for(let i=0;i<90;i++){ctx.globalAlpha=.025+r()*.035;ctx.fillStyle=r()>.5?'#c4ad78':'#263d2b';ctx.beginPath();ctx.ellipse(r()*1024,r()*1024,20+r()*70,10+r()*35,r()*Math.PI,0,Math.PI*2);ctx.fill()}
 ctx.globalAlpha=1;const tex=new THREE.CanvasTexture(c);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.repeat.set(40,40);tex.anisotropy=8;tex.encoding=THREE.sRGBEncoding;return tex}
-const groundMaterial=new THREE.MeshStandardMaterial({map:makeGroundTexture(),color:0xffffff,roughness:1,metalness:0});
+const groundMaterial=new THREE.MeshStandardMaterial({map:makeGroundTexture(),color:0xffffff,vertexColors:true,roughness:1,metalness:0});
 function build(){
- tiles.clear();gridTiles=null;
+ clearGroup(tiles);gridTiles=null;
  // Cała mapa ma jeden ciągły podkład, a siatka pól jest renderowana instancjami.
  // Dzięki temu 15 876 pól nie tworzy tysięcy osobnych obiektów Three.js.
  const groundSize=N+130,segments=180,geo=new THREE.PlaneGeometry(groundSize,groundSize,segments,segments),pos=geo.attributes.position;
- for(let i=0;i<pos.count;i++)pos.setZ(i,terrainHeight(pos.getX(i),-pos.getY()));
+ for(let i=0;i<pos.count;i++)pos.setZ(i,terrainHeight(pos.getX(i),-pos.getY(i)));
+ const colors=[];for(let j=0;j<pos.count;j++){const h=pos.getZ(j),c=new THREE.Color(h>13?0xb6bcb7:h>8?0x777d70:h>3?0x597044:0xffffff).convertSRGBToLinear();colors.push(c.r,c.g,c.b)}geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
  geo.computeVertexNormals();geo.rotateX(-Math.PI/2);const ground=new THREE.Mesh(geo,groundMaterial);ground.receiveShadow=true;ground.position.y=0;tiles.add(ground);
  const tileGeo=new THREE.BoxGeometry(.97,TILE_HEIGHT,.97);
  const sideMat=new THREE.MeshStandardMaterial({color:0x405f32,roughness:1});
@@ -230,30 +264,23 @@ function build(){
  MAP.forEach((t,k)=>{
   const x=k%N,y=Math.floor(k/N),[a,b]=W(x,y),r=rng(k+1601);
   dummy.position.set(a,groundAtCell(x,y)-TILE_HEIGHT/2,b);dummy.updateMatrix();gridTiles.setMatrixAt(k,dummy.matrix);
-  color.setHex(tilePalette[Math.floor(r()*tilePalette.length)]);gridTiles.setColorAt(k,color);
+  color.setHex(tilePalette[Math.floor(r()*tilePalette.length)]).convertSRGBToLinear();gridTiles.setColorAt(k,color);
  });
  gridTiles.instanceMatrix.needsUpdate=true;if(gridTiles.instanceColor)gridTiles.instanceColor.needsUpdate=true;
  gridTiles.receiveShadow=true;gridTiles.castShadow=false;tiles.add(gridTiles);
-  // Decorative meadows and forests outside playable bounds.
-  const rOuter=rng((S?.seed||31)+90210),dummyOuter=new THREE.Object3D();
-  const outerForest=new THREE.InstancedMesh(new THREE.ConeGeometry(.55,2.1,7),new THREE.MeshLambertMaterial({color:0x366c35}),220);
-  const outerTrunks=new THREE.InstancedMesh(new THREE.CylinderGeometry(.09,.13,.8,6),new THREE.MeshLambertMaterial({color:0x60432a}),220);
-  let outerCount=0;
-  for(let j=0;j<950&&outerCount<220;j++){
-    const xx=(rOuter()-.5)*(N+110),zz=(rOuter()-.5)*(N+110);
-    if(Math.abs(xx)<N/2+2&&Math.abs(zz)<N/2+2)continue;
-    const scale=.55+rOuter()*.85,base=terrainHeight(xx,zz);
-    dummyOuter.rotation.set(0,rOuter()*Math.PI*2,0);dummyOuter.scale.setScalar(scale);
-    dummyOuter.position.set(xx,base+1.2*scale,zz);dummyOuter.updateMatrix();outerForest.setMatrixAt(outerCount,dummyOuter.matrix);
-    dummyOuter.position.y=base+.4*scale;dummyOuter.updateMatrix();outerTrunks.setMatrixAt(outerCount,dummyOuter.matrix);outerCount++;
-  }
-  outerForest.count=outerTrunks.count=outerCount;tiles.add(outerForest,outerTrunks);
+  buildLandscape();
   const mid=Math.floor(N/2),[mx,mz]=W(mid,mid);
+  const arena=new THREE.Mesh(new THREE.CylinderGeometry(2.35,2.35,.025,48),new THREE.MeshStandardMaterial({color:0x706757,roughness:1,transparent:true,opacity:.72}));arena.position.set(mx,.065,mz);tiles.add(arena);
   const altar=new THREE.Mesh(new THREE.TorusGeometry(.66,.07,8,36),new THREE.MeshStandardMaterial({color:0x9e6ed8,emissive:0x371151,emissiveIntensity:.7}));
   altar.rotation.x=-Math.PI/2;altar.position.set(mx,groundAtCell(mid,mid)+.045,mz);tiles.add(altar);
 }
+function buildLandscape(){
+ const d=new THREE.Object3D();
+ const posts=new THREE.InstancedMesh(new THREE.CylinderGeometry(.06,.08,.65,6),mt(0x967653),4*(Math.ceil(N/3)+1));let n=0;
+ for(let i=-N/2;i<=N/2;i+=3)for(const [x,z] of [[i,-N/2],[i,N/2],[-N/2,i],[N/2,i]]){d.position.set(x,terrainHeight(x,z)+.325,z);d.rotation.set(0,0,0);d.scale.setScalar(1);d.updateMatrix();posts.setMatrixAt(n++,d.matrix)}posts.count=n;tiles.add(posts);
+}
 function put(g,c,x,y,s){const m=new THREE.Mesh(g,mt(c)),[a,b]=W(x,y);m.position.set(a,groundAtCell(x,y)+.35*(s||1),b);if(s)m.scale.setScalar(s);m.castShadow=true;dyn.add(m);return m}
-const sm=c=>new THREE.MeshStandardMaterial({color:c,roughness:.94}),GR=[0x245f28,0x2f7d32,0x3f9138,0x4b9b3c,0x286b2c].map(sm),
+const sm=c=>new THREE.MeshStandardMaterial({color:new THREE.Color(c).convertSRGBToLinear(),roughness:.94}),GR=[0x245f28,0x2f7d32,0x3f9138,0x4b9b3c,0x286b2c].map(sm),
 BR=new THREE.MeshStandardMaterial({color:0x60402a,roughness:1}),ST=sm(0x8a8f99),
 OR=new THREE.MeshStandardMaterial({color:0xd9a21b,metalness:.55,roughness:.42}),
 IC=new THREE.IcosahedronGeometry(1,1),TR=new THREE.CylinderGeometry(.11,.2,1.25,10);
@@ -279,29 +306,49 @@ function tree(x,y,k){
  g.scale.setScalar(.72+r()*.10);g.rotation.y=r()*6;
  g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});dyn.add(g);
 }
+// Articulated figures use human proportions and separate hands, boots and equipment.
+function part(parent,geo,mat,x,y,z,sx=1,sy=1,sz=1){const mesh=new THREE.Mesh(geo,mat);mesh.position.set(x,y,z);mesh.scale.set(sx,sy,sz);parent.add(mesh);return mesh}
+function limb(parent,mat,x,y,z,r,len,angle=0){const m=part(parent,new THREE.CapsuleGeometry(r,len,4,9),mat,x,y,z);m.rotation.z=angle;return m}
 function makeCharacter(p,i){
  const root=new THREE.Group(),[a,b]=W(p.x,p.y);root.position.set(a,groundAtCell(p.x,p.y),b);
- const cloth=new THREE.MeshStandardMaterial({color:COL[i],roughness:.78}),dark=new THREE.MeshStandardMaterial({color:0x252b35,roughness:.9}),
- skin=new THREE.MeshStandardMaterial({color:0xc99470,roughness:.85}),boot=new THREE.MeshStandardMaterial({color:0x33251f,roughness:1});
- const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.22,.48,4,8),cloth);torso.position.y=1.05;root.add(torso);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.17,14,12),skin);head.position.y=1.62;root.add(head);
-  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.065,.07,.13,9),skin);neck.position.y=1.46;root.add(neck);
-  const waist=new THREE.Mesh(new THREE.BoxGeometry(.33,.15,.23),dark);waist.position.y=.77;root.add(waist);
- const hair=new THREE.Mesh(new THREE.SphereGeometry(.175,12,8),dark);hair.scale.y=.55;hair.position.y=1.72;root.add(hair);
-  const eyeMat=new THREE.MeshBasicMaterial({color:0x22242b});
-  for(const sx of [-.064,.064]){const eye=new THREE.Mesh(new THREE.SphereGeometry(.018,8,6),eyeMat);eye.position.set(sx,1.63,.158);root.add(eye);
-  const ear=new THREE.Mesh(new THREE.SphereGeometry(.036,8,6),skin);ear.position.set(sx<0?-.171:.171,1.61,0);root.add(ear)}
-  const nose=new THREE.Mesh(new THREE.SphereGeometry(.028,8,6),skin);nose.position.set(0,1.585,.174);root.add(nose);
+ const cloth=sm(COL[i]),trousers=sm(0x353c3b),skin=sm([0xc99470,0xb78361,0xd7ad89,0x9e694d][i]),leather=sm(0x443329),hairMat=sm([0x30251e,0x543421,0x29211f,0x70543a][i]);
+ const sphere=new THREE.SphereGeometry(1,16,12);
+ part(root,sphere,cloth,0,1.08,0,.235,.32,.14);
+ part(root,new THREE.CylinderGeometry(.19,.16,.24,12),cloth,0,.87,0);
+ part(root,new THREE.CylinderGeometry(.195,.195,.065,12),leather,0,.81,0);
+ part(root,new THREE.BoxGeometry(.07,.055,.025),sm(0xb49a62),0,.81,.185);
+ limb(root,skin,0,1.43,0,.063,.1);
+ const head=part(root,sphere,skin,0,1.63,0,.145,.19,.14);
+ part(root,sphere,hairMat,0,1.745,-.017,.148,.094,.14);
+ part(root,sphere,skin,0,1.59,.146,.028,.037,.04);
+ part(root,sphere,sm(0x955e4c),0,1.535,.124,.043,.009,.012);
  for(const side of [-1,1]){
-  const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.075,.38,3,7),cloth);arm.position.set(side*.29,1.08,0);arm.rotation.z=side*.12;root.add(arm);
-  const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.09,.38,3,7),dark);leg.position.set(side*.12,.48,0);root.add(leg);
-  const shoe=new THREE.Mesh(new THREE.BoxGeometry(.17,.1,.27),boot);shoe.position.set(side*.12,.22,.06);root.add(shoe);
+  part(root,sphere,skin,side*.147,1.62,0,.032,.047,.025);
+  part(root,sphere,sm(0xe4ddd0),side*.054,1.651,.127,.031,.015,.014);
+  part(root,sphere,sm(0x302f25),side*.054,1.651,.139,.012,.012,.005);
+  const brow=part(root,new THREE.BoxGeometry(.065,.012,.018),hairMat,side*.055,1.685,.128);brow.rotation.z=-side*.12;
+  part(root,sphere,cloth,side*.235,1.255,0,.1,.12,.125);
+  limb(root,cloth,side*.27,1.135,0,.069,.20,side*.1);
+  limb(root,skin,side*.30,.925,.015,.057,.19,side*.05);
+  part(root,sphere,skin,side*.31,.765,.035,.057,.08,.045);
+  limb(root,trousers,side*.102,.62,0,.088,.24);
+  part(root,sphere,trousers,side*.102,.435,.025,.079,.083,.08);
+  limb(root,leather,side*.102,.27,.01,.069,.22);
+  part(root,sphere,leather,side*.102,.072,.08,.085,.072,.155);
  }
- if((p.weapon||0)>0){const blade=new THREE.Mesh(new THREE.BoxGeometry(.055,.72,.09),new THREE.MeshStandardMaterial({color:0xc7d3df,metalness:.8,roughness:.22}));blade.position.set(.36,1.12,.16);blade.rotation.x=-.25;root.add(blade);const guard=new THREE.Mesh(new THREE.BoxGeometry(.22,.06,.1),new THREE.MeshStandardMaterial({color:0x9a7137,metalness:.55}));guard.position.set(.36,.82,.16);root.add(guard)}
- if((p.armor||0)>0){const chest=new THREE.Mesh(new THREE.BoxGeometry(.48,.46,.34),new THREE.MeshStandardMaterial({color:0x687887,metalness:.45,roughness:.4}));chest.position.y=1.08;root.add(chest)}
+ // Backpack, shoulder straps and a scabbard give a readable adventurer silhouette.
+ part(root,new THREE.BoxGeometry(.28,.38,.14),leather,0,1.10,-.19);
+ for(const side of [-1,1])part(root,new THREE.BoxGeometry(.04,.43,.035),leather,side*.145,1.10,.14);
+ if(p.weapon){const steel=new THREE.MeshStandardMaterial({color:0xc3ced1,metalness:.8,roughness:.27});const sword=new THREE.Group();sword.position.set(.32,.77,.10);sword.rotation.x=p.guard?-.7:-.18;part(sword,new THREE.BoxGeometry(.052,.59,.025),steel,0,.34,0);part(sword,new THREE.ConeGeometry(.037,.12,4),steel,0,.695,0);part(sword,new THREE.BoxGeometry(.2,.035,.065),sm(0xb0924f),0,.05,0);limb(sword,leather,0,-.02,0,.025,.1);root.add(sword)}
+ if(p.armor){const iron=new THREE.MeshStandardMaterial({color:0x78848c,metalness:.65,roughness:.42});part(root,sphere,iron,0,1.13,.025,.247,.25,.17);for(const side of [-1,1])part(root,sphere,iron,side*.242,1.29,0,.115,.07,.135)}
+ if(p.guard){const shield=part(root,new THREE.CylinderGeometry(.24,.24,.065,16),sm(0x71818d),-.34,1.05,.2);shield.rotation.x=Math.PI/2;part(root,sphere,sm(0xc2ad78),-.34,1.05,.25,.07,.07,.025)}
+ if(p.bow){const bow=part(root,new THREE.TorusGeometry(.25,.022,6,20,Math.PI),leather,-.18,1.04,-.3);bow.rotation.z=Math.PI/2;const string=part(root,new THREE.CylinderGeometry(.004,.004,.5,4),sm(0xd6c7a3),-.18,1.04,-.3);string.rotation.z=0;}
  const d=p.dir||{x:0,z:1};root.rotation.y=Math.atan2(d.x,d.z);
+ root.userData.npcAnimation={type:'human',phase:i*1.7,baseY:root.position.y,baseRot:root.rotation.y,head};
  root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});dyn.add(root);
 }
+function makeGarden(x,y,ready){const root=new THREE.Group(),[a,b]=W(x,y);root.position.set(a,groundAtCell(x,y),b);for(let j=0;j<5;j++){const leaf=part(root,new THREE.SphereGeometry(1,7,5),sm(ready?0x4d873f:0x75944e),(j%3-1)*.16,.06+Number(ready)*.1,(Math.floor(j/3)-.5)*.2,.07,ready?.18:.06,.07);leaf.rotation.z=(j%2-.5)*.6;if(ready)part(root,new THREE.SphereGeometry(.04,7,5),sm(0xbf80bb),(j%3-1)*.16,.3,(Math.floor(j/3)-.5)*.2)}dyn.add(root)}
+function makeCamp(x,y){const root=new THREE.Group(),[a,b]=W(x,y);root.position.set(a,groundAtCell(x,y),b);for(let i=0;i<8;i++){const angle=i/8*Math.PI*2;part(root,new THREE.DodecahedronGeometry(.09),ST,Math.cos(angle)*.29,.07,Math.sin(angle)*.29)}for(const side of [-1,1]){const log=part(root,new THREE.CylinderGeometry(.06,.07,.45,7),BR,0,.1,0);log.rotation.set(Math.PI/2,side*.65,0)}const flame=part(root,new THREE.ConeGeometry(.14,.43,7),new THREE.MeshStandardMaterial({color:0xffbc4e,emissive:0xff641d,emissiveIntensity:1.5}),0,.29,0);root.userData.npcAnimation={type:'fire',phase:x+y,baseY:root.position.y,baseRot:0,head:flame};dyn.add(root)}
 function obj(t,k,x,y){if(!t.res)return;const r=rng(k+3);
 if(t.res=="wood"){if(S.taken[k]){const m=put(G.cyl,0x6b3a26,x,y,.35);m.scale.set(.5,.25,.5)}else tree(x,y,k);return}
 if(S.taken[k])return;
@@ -333,13 +380,36 @@ function heartBar(x,z,y,hp,max){
  }
  const sprite=new THREE.Sprite(mat);sprite.position.set(x,y,z);sprite.scale.set(count*.17,.24,1);dyn.add(sprite);
 }
-function makeMonster(t,k,x,y){const [a,b]=W(x,y),g=new THREE.Group();g.position.set(a,groundAtCell(x,y),b);const boss=t.mon==2,skin=new THREE.MeshStandardMaterial({color:boss?0x49305f:0x6c3430,roughness:.88}),armor=new THREE.MeshStandardMaterial({color:boss?0x241b35:0x342c2b,metalness:.25,roughness:.7});const torso=new THREE.Mesh(new THREE.CapsuleGeometry(boss?.36:.24,boss?.75:.45,5,10),skin);torso.position.y=boss?1.25:0.95;g.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(boss?.3:.2,16,12),skin);head.position.y=boss?2.05:1.62;g.add(head);for(const side of [-1,1]){const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.11,boss?.65:.4,4,8),skin);arm.position.set(side*(boss?.48:.34),boss?1.35:1.12,0);arm.rotation.z=side*.25;g.add(arm);const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.5,4,8),armor);leg.position.set(side*.17,.38,0);g.add(leg);const horn=new THREE.Mesh(new THREE.ConeGeometry(.09,boss?.55:.22,8),armor);horn.position.set(side*.2,boss?2.36:1.82,.02);horn.rotation.z=side*-.35;g.add(horn)}const plate=new THREE.Mesh(new THREE.BoxGeometry(boss?.72:.5,.32,.38),armor);plate.position.y=boss?1.45:1.08;g.add(plate);
-  const eyes=new THREE.MeshBasicMaterial({color:boss?0xff55de:0xff9e35});
-  for(const sx of [-1,1]){const eye=new THREE.Mesh(new THREE.SphereGeometry(boss?.065:.04,9,7),eyes);eye.position.set(sx*(boss?.12:.085),boss?2.08:1.65,boss?.28:.19);g.add(eye)}
-  const jaw=new THREE.Mesh(new THREE.BoxGeometry(boss?.3:.17,.07,.065),armor);jaw.position.set(0,boss?1.9:1.5,boss?.285:.195);g.add(jaw);
-  if(boss){const crown=new THREE.Mesh(new THREE.OctahedronGeometry(.23),new THREE.MeshStandardMaterial({color:0xc65af7,emissive:0x5e1688,emissiveIntensity:.7}));crown.position.y=2.54;g.add(crown)}g.userData.npcAnimation={type:'monster',phase:rng(k+977)()*Math.PI*2,baseY:g.position.y,baseRot:g.rotation.y,head};g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});dyn.add(g);heartBar(a,b,boss?2.72:2.12,mhp(k),boss?60:12)}
+function makeMonster(t,k,x,y){
+ const [a,b]=W(x,y),g=new THREE.Group(),boss=t.mon===2;g.position.set(a,groundAtCell(x,y),b);
+ const skin=sm(boss?0x696052:0x6a7362),hornMat=sm(0xb8a481),dark=sm(0x302e29),plate=new THREE.MeshStandardMaterial({color:boss?0x3b4042:0x524c40,roughness:.75,metalness:.3}),glow=new THREE.MeshStandardMaterial({color:0xffc16d,emissive:0xff4919,emissiveIntensity:1.4});
+ const sphere=new THREE.SphereGeometry(1,16,12);
+ const torso=part(g,sphere,skin,0,1.02,0,.34,.48,.23);torso.rotation.x=.18;
+ part(g,sphere,plate,0,1.26,-.025,.4,.23,.25);
+ const head=part(g,sphere,skin,0,1.61,.12,.22,.23,.21);
+ part(g,sphere,dark,0,1.50,.27,.16,.09,.12);
+ for(const side of [-1,1]){
+  part(g,sphere,skin,side*.37,1.26,0,.18,.20,.19);
+  limb(g,skin,side*.42,1.02,.04,.125,.33,-side*.15);
+  limb(g,dark,side*.49,.74,.09,.11,.20,-side*.12);
+  part(g,sphere,skin,side*.51,.56,.12,.13,.17,.12);
+  for(let f=0;f<3;f++){const claw=part(g,new THREE.ConeGeometry(.025,.18,6),hornMat,side*.51+(f-1)*.07,.40,.18);claw.rotation.x=Math.PI*.85}
+  limb(g,skin,side*.18,.52,-.035,.135,.30,side*.12);
+  limb(g,dark,side*.21,.22,.005,.09,.22,-side*.16);
+  part(g,sphere,dark,side*.23,.065,.11,.13,.07,.21);
+  part(g,sphere,glow,side*.085,1.66,.307,.047,.025,.023);
+  const brow=part(g,new THREE.BoxGeometry(.16,.045,.065),plate,side*.09,1.71,.29);brow.rotation.z=side*.24;
+  const horn=part(g,new THREE.ConeGeometry(.09,boss?.52:.25,9),hornMat,side*.21,boss?1.99:1.86,.08);horn.rotation.z=-side*.5;
+  for(let f=0;f<2;f++)part(g,new THREE.ConeGeometry(.027,.11,6),hornMat,side*(.065+f*.055),1.52,.36);
+ }
+ // A hunched back, jagged spine and oversized claws distinguish creatures from people.
+ for(let j=0;j<4;j++){const spike=part(g,new THREE.ConeGeometry(.065,.27+j*.025,7),plate,0,1.43-j*.16,-.25);spike.rotation.x=-Math.PI*.55}
+ if(boss){g.scale.setScalar(1.6);for(const side of [-1,1])for(let n=0;n<3;n++){const spike=part(g,new THREE.ConeGeometry(.09,.34,7),hornMat,side*(.27+n*.1),1.48,0);spike.rotation.z=-side*(.3+n*.3)}for(let j=0;j<3;j++)part(g,new THREE.BoxGeometry(.04,.18,.035),glow,(j-1)*.1,1.22,.24)}
+ g.rotation.y=Math.atan2(S.pl[S.turn].x-x,S.pl[S.turn].y-y);
+ g.userData.npcAnimation={type:'monster',phase:rng(k+977)()*Math.PI*2,baseY:g.position.y,baseRot:g.rotation.y,head};g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});dyn.add(g);healthBar(a,b,groundAtCell(x,y)+(boss?3.72:2.22),mhp(k),boss?60:12);
+}
 function draw(){if(!S)return;if(!tiles.children.length||tiles.userData.seed!=S.seed){if(!Array.isArray(MAP)||MAP.length!==N*N)MAP=genMap(S.seed);build();tiles.userData.seed=S.seed}
-dyn.clear();
+clearGroup(dyn);
 // Szczegółowe obiekty i NPC są tworzone w pobliżu graczy; odległe pola nadal istnieją w mapie.
 const visibleCells=new Set(),renderRadius=22;
 for(const pl of S.pl){
@@ -347,23 +417,32 @@ for(const pl of S.pl){
  const minY=Math.max(0,pl.y-renderRadius),maxY=Math.min(N-1,pl.y+renderRadius);
  for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++)visibleCells.add(key(x,y));
 }
+visibleCells.add(key(Math.floor(N/2),Math.floor(N/2)));
 for(const k of visibleCells){const t=MAP[k],x=k%N,y=Math.floor(k/N);
  obj(t,k,x,y);
+ if(S.camps[k])makeCamp(x,y);
+ if(S.gardens[k])makeGarden(x,y,gardenReady(k));
+ if(S.traps[k]){const [tx,tz]=W(x,y),ring=new THREE.Mesh(new THREE.TorusGeometry(.4,.035,6,24),sm(0xa58b58));ring.rotation.x=-Math.PI/2;ring.position.set(tx,groundAtCell(x,y)+.07,tz);dyn.add(ring)}
  if(t.mon&&mhp(k)>0)makeMonster(t,k,x,y);
  if(t.animal)makeAnimal(t,k,x,y);
 }
+if(S.bossWarning){const mid=Math.floor(N/2);for(let y=mid-2;y<=mid+2;y++)for(let x=mid-2;x<=mid+2;x++)if(D(x,y,mid,mid)<=2){const [wx,wz]=W(x,y),m=new THREE.Mesh(new THREE.PlaneGeometry(.92,.92),new THREE.MeshBasicMaterial({color:0xef493a,transparent:true,opacity:.42,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(wx,.095,wz);dyn.add(m)}}
 S.pl.forEach((p,i)=>{makeCharacter(p,i);const [a,b]=W(p.x,p.y);healthBar(a,b,groundAtCell(p.x,p.y)+2.05,p.hp,10)});
 $("hud").innerHTML=S.pl.map((p,i)=>`<div class="pc ${i==S.turn?"cur":""}" style="border-left-color:#${COL[i].toString(16)}"><b>${p.name}${p.bot?" · BOT":""}</b><span class="score">★ ${p.pts} pkt</span><div class="hearts">${Array.from({length:10},(_,n)=>`<span class="heart ${n>=p.hp?"off":""}">♥</span>`).join("")}</div><small>⚔ ${p.atk+p.weapon} · 🛡 ${p.armor} · ✦ ${p.am} · 🥩 ${p.inv.meat} · 🪵 ${p.inv.wood} · ⛏ ${p.inv.ore}</small></div>`).join("");
-const ca=canAct(),p=S.pl[S.turn];$("inv").innerHTML=`🎒 Drewno ${p.inv.wood}　Kamień ${p.inv.stone}　Ruda ${p.inv.ore}　Zioła ${p.inv.herb}　🥩 Mięso ${p.inv.meat}　⚔ ${p.weapon}　🛡 ${p.armor}`;
+const ca=canAct(),p=S.pl[S.turn];$("inv").innerHTML=[['🪵 Drewno',p.inv.wood],['🪨 Kamień',p.inv.stone],['⛏ Ruda',p.inv.ore],['🌿 Zioła',p.inv.herb],['🥩 Mięso',p.inv.meat],['🍖 Pieczeń',p.inv.cooked||0],['⚔ Miecz',p.weapon],['🛡 Pancerz',p.armor],['Kilof',p.pickaxe?'tak':'nie'],['🏹 Łuk',p.bow?'tak':'nie'],['Strzały',p.inv.arrows]].map(([label,n])=>`<span>${label} <b>${n}</b></span>`).join('');
+const mid=Math.floor(N/2),bk=key(mid,mid),hp=Math.max(0,mhp(bk));$('bossHud').innerHTML=`<b>STRAŻNIK PÓL · ${hp}/60 HP</b><progress max="60" value="${hp}"></progress><small>${hp<=0?'Pokonany':S.bossWarning?'⚠ Uderzenie: czerwone pola · po końcu tury':hp<=30?'Furia · silniejsze ciosy':'Centrum mapy · '+D(p.x,p.y,mid,mid)+' pól od Ciebie'}</small>`;
+$('bGuard').disabled=!ca||S.a<1||p.guard;
 $("log").textContent=S.log+"  |  ruchy: "+S.m+"  akcje: "+S.a;
-$("bCol").disabled=!ca||S.a<1||!MAP[key(p.x,p.y)].res||!!S.taken[key(p.x,p.y)];$("bCr").disabled=!ca||S.a<1||p.inv.wood<2||p.inv.ore<1;$("bHe").disabled=!ca||S.a<1||p.inv.herb<2||p.hp>=10;$("bEnd").disabled=!ca;$("bEat").disabled=!ca||S.a<1||p.inv.meat<1||p.hp>=10;$("bFight").disabled=!ca||S.a<1;document.documentElement.style.setProperty("--bar-height",$("bar").offsetHeight+"px")}
+const here=key(p.x,p.y);$("bCol").disabled=!ca||S.a<1||(S.gardens[here]?!gardenReady(here):(!MAP[here].res||!!S.taken[here]));$('bShoot').disabled=!ca||S.a<1||!p.bow||p.inv.arrows<1||!monsterTargets(p,3).length;$("bCr").disabled=!ca||S.a<1||p.inv.wood<2||p.inv.ore<1;$("bHe").disabled=!ca||S.a<1||p.inv.herb<2||p.hp>=10;$("bEnd").disabled=!ca;$("bEat").disabled=!ca||S.a<1||(p.inv.meat<1&&!(p.inv.cooked>0))||p.hp>=10;$("bFight").disabled=!ca||S.a<1;updateOverlayLayout();if(!$("recipe").classList.contains("hide"))openRecipes(true)}
+function updateOverlayLayout(){const root=document.documentElement;root.style.setProperty('--bar-height',$('bar').offsetHeight+'px');root.style.setProperty('--inv-height',$('inv').offsetHeight+'px')}
+const overlayObserver=new ResizeObserver(()=>{updateOverlayLayout();layout()});overlayObserver.observe($('bar'));overlayObserver.observe($('inv'));
 let cameraMode='third',cameraYaw=0,cameraPitch=.32,cameraZoom=1,dragState=null,lastKeyMove=0,activeCameraPane=0,cameraYawByPane=[0,0,0,0],cameraPitchByPane=[.32,.32,.32,.32];
 const cameraLabels={third:'3. osoba',top:'z góry',first:'1. osoba'};
 function updateCameraLabel(){if($('bCam'))$('bCam').textContent='Kamera: '+cameraLabels[cameraMode]+' · C · scroll: zoom'}
 function cycleCamera(){cameraMode=cameraMode==='third'?'top':cameraMode==='top'?'first':'third';updateCameraLabel()}
 function activePaneAt(x,y){return panes.find(p=>p.r&&x>=p.r.x&&x<p.r.x+p.r.w&&y>=p.r.y&&y<p.r.y+p.r.h)||null}
-function layout(){document.documentElement.style.setProperty('--bar-height',($('bar').offsetHeight||0)+'px');const w=Math.max(1,innerWidth),h=Math.max(1,innerHeight-($('bar').offsetHeight||0)),n=panes.length||1,c=n>1?2:1,r=n>2?2:1;R.setSize(innerWidth,innerHeight);panes.forEach((p,i)=>{p.r={x:(i%c)*w/c,y:(i/c|0)*h/r,w:w/c,h:h/r};p.cam.aspect=p.r.w/p.r.h;p.cam.updateProjectionMatrix()})}
-function setPanes(list){panes=list.map(pi=>({pi,cam:new THREE.PerspectiveCamera(68,1,.1,260),t:new THREE.Vector3()}));layout()}
+function layout(){updateOverlayLayout();const w=Math.max(1,innerWidth),h=Math.max(1,innerHeight-($('bar').offsetHeight||0)),n=panes.length||1,c=n>1?2:1,r=n>2?2:1;R.setSize(innerWidth,innerHeight);panes.forEach((p,i)=>{p.r={x:(i%c)*w/c,y:(i/c|0)*h/r,w:w/c,h:h/r};p.cam.aspect=p.r.w/p.r.h;p.cam.updateProjectionMatrix()})}
+function setPanes(list){panes=list.map(pi=>{const idx=pi==='cur'?(net?Math.max(0,S.pl.findIndex(q=>q.peer===net.localPlayerId)):S.turn):pi,pl=S.pl[idx]||S.pl[0],[x,z]=W(pl.x,pl.y),cam=new THREE.PerspectiveCamera(68,1,.1,260),d=pl.dir||{x:0,z:1};cam.position.set(x-d.x*4.4,2.8,z-d.z*4.4);cam.lookAt(x,1.28,z);return{pi,cam,t:new THREE.Vector3(x,1.28,z)}});layout()}
 const npcClock=new THREE.Clock();
 let lastPadMove=0;function loop(){requestAnimationFrame(loop);if(!S)return;const pads=navigator.getGamepads?navigator.getGamepads():[];const pad=pads&&Array.from(pads).find(Boolean);if(pad&&canAct()&&Date.now()-lastPadMove>300){const ax=pad.axes&&pad.axes[0]||0,ay=pad.axes&&pad.axes[1]||0;let k=null;if(Math.abs(ax)>.65||Math.abs(ay)>.65)k=Math.abs(ax)>Math.abs(ay)?(ax<0?'a':'d'):(ay<0?'w':'s');if(k){moveByKey(k);lastPadMove=Date.now()}}const npcTime=npcClock.getElapsedTime();for(const npc of dyn.children){const a=npc.userData&&npc.userData.npcAnimation;if(!a)continue;const wave=Math.sin(npcTime*.62+a.phase);npc.position.y=a.baseY+wave*(a.type==='animal'?.018:.012);npc.rotation.y=a.baseRot+Math.sin(npcTime*.28+a.phase)*.025;if(a.head)a.head.rotation.z=Math.sin(npcTime*.42+a.phase)*.025;}const H2=innerHeight;R.setViewport(0,0,innerWidth,H2);R.setScissor(0,0,innerWidth,H2);R.clear();panes.forEach((p,paneIndex)=>{const cy=cameraYawByPane[paneIndex]??cameraYaw,cp=cameraPitchByPane[paneIndex]??cameraPitch;const playerIndex=p.pi==='cur'?(net?Math.max(0,S.pl.findIndex(q=>q.peer===net.localPlayerId)):S.turn):p.pi;const pl=S.pl[playerIndex]||S.pl[0],[a,b]=W(pl.x,pl.y),d=pl.dir||{x:0,z:1};const baseYaw=Math.atan2(-d.x,-d.z),yaw=baseYaw+cy,forwardX=-Math.sin(yaw),forwardZ=-Math.cos(yaw);p.t.lerp(new THREE.Vector3(a,1.28,b),.18);if(cameraMode==='top'){p.cam.up.set(Math.sin(cy),0,-Math.cos(cy));p.cam.position.lerp(new THREE.Vector3(a,15.5*cameraZoom,b+.001),.16);p.cam.lookAt(a,0,b)}else if(cameraMode==='first'){p.cam.up.set(0,1,0);p.cam.position.lerp(new THREE.Vector3(a,1.57,b),.22);p.cam.fov=Math.max(42,Math.min(82,68*cameraZoom));p.cam.updateProjectionMatrix();p.cam.lookAt(a+forwardX*4,1.52-Math.sin(cp)*.8,b+forwardZ*4)}else{p.cam.up.set(0,1,0);const arm=4.65*cameraZoom,dist=arm*Math.cos(cameraPitch),height=1.28+arm*Math.sin(cameraPitch),behind=new THREE.Vector3(a+Math.sin(yaw)*dist,height,b+Math.cos(yaw)*dist);p.cam.position.lerp(behind,.16);p.cam.lookAt(p.t)}R.setViewport(p.r.x,H2-p.r.y-p.r.h,p.r.w,p.r.h);R.setScissor(p.r.x,H2-p.r.y-p.r.h,p.r.w,p.r.h);R.render(sc,p.cam)})}
 R.domElement.addEventListener('wheel',e=>{if(!S)return;e.preventDefault();cameraZoom=Math.max(.55,Math.min(2.4,cameraZoom*Math.exp(e.deltaY*.001)));},{passive:false});
@@ -374,6 +453,7 @@ function selectWorldAt(e,pn){
  const hit=ray.intersectObjects(tiles.children,true).find(h=>h.object===gridTiles&&Number.isInteger(h.instanceId));
  if(!hit)return;const idx=hit.instanceId,x=idx%N,y=Math.floor(idx/N),p=S.pl[S.turn];
  if(alive(x,y)&&D(x,y,p.x,p.y)===1)act({t:'att',x,y});
+ else if(alive(x,y)&&p.bow&&D(x,y,p.x,p.y)<=3)act({t:'shot',x,y});
  else if(MAP[key(x,y)].animal&&D(x,y,p.x,p.y)===1)act({t:'animal',x,y});
  else if(x===p.x&&y===p.y)act({t:'col'});
  else{const q=S.pl.findIndex((v,i)=>i!==S.turn&&v.hp>0&&v.x===x&&v.y===y);if(q>=0&&D(x,y,p.x,p.y)===1)act({t:'pvp',i:q});else act({t:'move',x,y})}
@@ -383,89 +463,20 @@ R.domElement.addEventListener('pointermove',e=>{if(!dragState||dragState.id!==e.
 R.domElement.addEventListener('pointerup',e=>{if(!dragState||dragState.id!==e.pointerId)return;const d=dragState;dragState=null;if(!d.moved&&Math.hypot(e.clientX-d.x,e.clientY-d.y)<7)selectWorldAt(e,d.pn)});R.domElement.addEventListener('pointercancel',()=>{dragState=null});
 function moveByKey(k){if(k==='arrowup')k='w';else if(k==='arrowdown')k='s';else if(k==='arrowleft')k='a';else if(k==='arrowright')k='d';if(!S||!canAct()||S.m<1)return;const p=S.pl[S.turn],d=p.dir||{x:0,z:1},yaw=Math.atan2(-d.x,-d.z)+(cameraYawByPane[activeCameraPane]??cameraYaw),fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=fz,rz=-fx;let vx=0,vz=0;if(k==='w'){vx=fx;vz=fz}else if(k==='s'){vx=-fx;vz=-fz}else if(k==='a'){vx=-rx;vz=-rz}else if(k==='d'){vx=rx;vz=rz}else return;const xs=Math.abs(vx)>Math.abs(vz)?Math.sign(vx):0,zs=Math.abs(vz)>=Math.abs(vx)?Math.sign(vz):0,nx=p.x+xs,ny=p.y+zs;if(nx===p.x&&ny===p.y)return;act({t:'move',x:nx,y:ny})}
 R.domElement.addEventListener('contextmenu',e=>e.preventDefault());
-function openRecipes(){if(!S)return;const p=S.pl[S.turn],r=[['Miecz żelazny','2 drewna + 2 rudy','sword',p.inv.wood>=2&&p.inv.ore>=2],['Pancerz','1 drewno + 3 kamienie + 1 ruda','armor',p.inv.wood>=1&&p.inv.stone>=3&&p.inv.ore>=1],['Mikstura','3 zioła · leczy 5 serc','potion',p.inv.herb>=3],['Ognisko','2 drewna + 1 kamień · leczy 4 serca','camp',p.inv.wood>=2&&p.inv.stone>=1&&p.hp<10]];$('recipeList').innerHTML=r.map(([n,c,w,ok])=>`<div class="rec"><span><b>${n}</b><br><small>${c}</small></span><button ${!canAct()||S.a<1||!ok?'disabled':''} data-craft="${w}">Wytwórz</button></div>`).join('');$('recipeList').querySelectorAll('[data-craft]').forEach(b=>b.onclick=()=>{act(b.dataset.craft==='camp'?{t:'camp'}:{t:'craftType',what:b.dataset.craft});openRecipes()});$('recipe').classList.toggle('hide')}
-$("bInteract").onclick=openRecipes;
+function openRecipes(refresh=false){if(!S)return;const p=S.pl[S.turn],camp=!!S.camps[key(p.x,p.y)],r=[['Łuk','3 drewna + 1 ruda · zasięg 3 pola','bow',!p.bow&&p.inv.wood>=3&&p.inv.ore>=1],['4 strzały','1 drewno + 1 kamień','arrows',p.inv.wood>=1&&p.inv.stone>=1],['Zasadź zioła','1 zioło + 1 drewno · zbiór 3 po 2 Twoich turach','plant',p.inv.herb>=1&&p.inv.wood>=1&&canPlant(p)],['Załóż sidła','2 drewna + 1 kamień · następny cios +4','trap',p.inv.wood>=2&&p.inv.stone>=1&&monsterTargets(p,1).some(q=>!S.traps[key(q.x,q.y)])],['Kilof','2 drewna + 2 kamienie · podwójne wydobycie','pickaxe',!p.pickaxe&&p.inv.wood>=2&&p.inv.stone>=2],['Piecz mięso','Ognisko + 1 mięso · pieczeń leczy 6','cook',camp&&p.inv.meat>0],['Odpocznij','Przy ognisku · +2 zdrowia','rest',camp&&p.hp<10],['Miecz żelazny','2 drewna + 2 rudy','sword',p.inv.wood>=2&&p.inv.ore>=2],['Pancerz','1 drewno + 3 kamienie + 1 ruda','armor',p.inv.wood>=1&&p.inv.stone>=3&&p.inv.ore>=1],['Mikstura','3 zioła · leczy 5 serc','potion',p.inv.herb>=3],['Ognisko','2 drewna + 1 kamień · leczy 4 serca','camp',p.inv.wood>=2&&p.inv.stone>=1&&!camp&&!S.gardens[key(p.x,p.y)]]];$('recipeList').innerHTML=r.map(([n,c,w,ok])=>`<div class="rec"><span><b>${n}</b><br><small>${c}</small></span><button ${!canAct()||S.a<1||!ok?'disabled':''} data-craft="${w}">${w==='plant'?'Zasadź':w==='trap'?'Załóż':w==='rest'?'Odpocznij':w==='cook'?'Upiecz':w==='camp'?'Zbuduj':'Wytwórz'}</button></div>`).join('');$('recipeList').querySelectorAll('[data-craft]').forEach(b=>b.onclick=()=>{act(['camp','cook','rest','plant','trap'].includes(b.dataset.craft)?{t:b.dataset.craft}:{t:'craftType',what:b.dataset.craft});openRecipes(true)});if(!refresh)$('recipe').classList.toggle('hide')}
+$("bShoot").onclick=()=>{if(!S)return;const q=monsterTargets(S.pl[S.turn],3)[0];if(q)act({t:"shot",x:q.x,y:q.y})};$("bInteract").onclick=()=>openRecipes();$("bGuard").onclick=()=>act({t:"guard"});
 $('bCam').onclick=cycleCamera;updateCameraLabel();
 addEventListener('keydown',e=>{const tag=e.target&&e.target.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;const k=e.key.toLowerCase();if(['w','a','s','d','c','e','arrowup','arrowdown','arrowleft','arrowright'].includes(k))e.preventDefault();if(k==='e'&&!e.repeat&&S){openRecipes();return}if(k==='c'&&!e.repeat&&S){cycleCamera();return}if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(k)){const now=Date.now();if(!e.repeat||now-lastKeyMove>260){lastKeyMove=now;moveByKey(k)}}});
 $('touchPad').querySelectorAll('[data-move]').forEach(b=>b.addEventListener('click',()=>moveByKey(b.dataset.move)));
 $("bEat").onclick=()=>act({t:'eat'});$("bFight").onclick=()=>{if(!S)return;const p=S.pl[S.turn],q=S.pl.findIndex((v,i)=>i!==S.turn&&v.hp>0&&D(v.x,v.y,p.x,p.y)==1);if(q>=0){act({t:'pvp',i:q});return}for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const x=p.x+dx,y=p.y+dy;if(alive(x,y)){act({t:'att',x,y});return}if(inb(x,y)&&MAP[key(x,y)].animal){act({t:'animal',x,y});return}}};
 $("bCol").onclick=()=>act({t:"col"});$("bCr").onclick=()=>act({t:"craft"});$("bHe").onclick=()=>act({t:"heal"});$("bEnd").onclick=()=>act({t:"end"});
-$("bMenu").onclick=()=>{if(botT)clearTimeout(botT);botT=0;if(net)closeNet();S=null;panes=[];dyn.clear();$("menu").classList.remove("hide");["hud","bar","inv","recipe","cameraDock","touchPad"].forEach(i=>$(i).classList.add("hide"));$("lobby").classList.add("hide")};
+$("bMenu").onclick=()=>{if(botT)clearTimeout(botT);botT=0;S=null;panes=[];clearGroup(dyn);$("menu").classList.remove("hide");["hud","bar","inv","recipe","cameraDock","touchPad","bossHud"].forEach(i=>$(i).classList.add("hide"));};
 addEventListener("resize",layout);
-function show(){$("menu").classList.add("hide");["hud","bar","inv","cameraDock"].forEach(i=>$(i).classList.remove("hide"));if(matchMedia("(pointer:coarse)").matches)$("touchPad").classList.remove("hide");layout()}
-function start(humans,bots,m){N=+$('mapSize').value||25;if(net)closeNet();mode=m;auth=true;net=null;cameraMode="third";cameraYaw=0;cameraPitch=.32;cameraYawByPane=[0,0,0,0];cameraPitchByPane=[.32,.32,.32,.32];activeCameraPane=0;cameraZoom=1;updateCameraLabel();const l=[];for(let i=0;i<humans;i++)l.push({name:"Gracz "+(i+1)});for(let i=0;i<bots;i++)l.push({name:"Bot "+(i+1),bot:1});
+function show(){$("menu").classList.add("hide");["hud","bar","inv","cameraDock","bossHud"].forEach(i=>$(i).classList.remove("hide"));if(matchMedia("(pointer:coarse)").matches)$("touchPad").classList.remove("hide");layout()}
+function start(humans,bots,m){N=+$('mapSize').value||25;mode=m;auth=true;net=null;cameraMode="third";cameraYaw=0;cameraPitch=.32;cameraYawByPane=[0,0,0,0];cameraPitchByPane=[.32,.32,.32,.32];activeCameraPane=0;cameraZoom=1;updateCameraLabel();const l=[];for(let i=0;i<humans;i++)l.push({name:"Gracz "+(i+1)});for(let i=0;i<bots;i++)l.push({name:"Bot "+(i+1),bot:1});
 newGame(Date.now()%1e9,l);show();setPanes(m=="local"?[...Array(humans).keys()]:["cur"]);sync()}
 $("mSolo").onclick=()=>start(1,+$("soloB").value,"solo");
 $("mLocal").onclick=()=>{const h=+$("locH").value;start(h,Math.min(+$("locB").value,4-h),"local")};
-// ---- Multiplayer online przez PeerJS/WebRTC (bez logowania)
-function roomPeerId(code){return "arx-"+code+"-host"}
-function randomRoomCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
-function setNetStatus(msg){if($("netStatus"))$("netStatus").textContent=msg}
-function updateNetLobby(){
- if(!net)return;
- const connected=!!(net.conn&&net.conn.open);
- $("lp").textContent=net.host?(connected?"2/2":"1/2"): (connected?"2/2":"Łączenie…");
- if(net.host){setNetStatus(connected?"Znajomy dołączył. Możesz rozpocząć grę.":"Czekam na znajomego…");$("bStart").disabled=!connected;}
- else{setNetStatus(connected?"Połączono! Czekam, aż gospodarz rozpocznie grę…":"Łączenie z gospodarzem…");}
-}
-function sendState(){if(net&&net.host&&net.conn&&net.conn.open&&S){try{net.conn.send({type:"state",S,MAP})}catch(e){setNetStatus("Błąd wysyłania stanu gry.")}}}
-function closeNet(){if(!net)return;try{if(net.conn)net.conn.close()}catch(e){}try{if(net.peer&&!net.peer.destroyed)net.peer.destroy()}catch(e){}net=null;myPeer=null;}
-function bindHostConnection(conn){
- if(net&&net.conn&&net.conn.open){conn.close();return;}
- net.conn=conn;
- conn.on("open",()=>{if(!net)return;net.guestConnected=true;conn.send({type:"welcome",code:net.code});updateNetLobby();if(S)sendState()});
- conn.on("data",msg=>{
-  if(!net||!net.host||!msg)return;
-  if(msg.type==="join"){net.guestConnected=true;updateNetLobby();if(S)sendState();return;}
-  if(msg.type==="cmd"&&S&&S.win<0&&S.pl[S.turn]&&S.pl[S.turn].peer==="guest"){
-   const beforeTurn=S.turn;apply(msg.c||{});if(S.turn!==beforeTurn||S.log)sync();
-  }
- });
- conn.on("close",()=>{if(net){net.guestConnected=false;updateNetLobby();setNetStatus("Znajomy rozłączył się. Można połączyć ponownie tym samym kodem.")}});
- conn.on("error",()=>setNetStatus("Błąd połączenia danych. Spróbuj ponownie."));
-}
-function bindGuestConnection(conn){
- net.conn=conn;
- conn.on("open",()=>{if(!net)return;net.guestConnected=true;conn.send({type:"join",name:"Gracz 2"});updateNetLobby()});
- conn.on("data",msg=>{
-  if(!net||net.host||!msg)return;
-  if(msg.type==="welcome"){net.guestConnected=true;updateNetLobby();return;}
-  if(msg.type==="state"&&msg.S){S=msg.S;MAP=msg.MAP||genMap(S.seed);if(panes.length===0){show();setPanes(["cur"])}draw();}
- });
- conn.on("close",()=>{if(net){net.guestConnected=false;setNetStatus("Utracono połączenie z gospodarzem.")}});
- conn.on("error",()=>setNetStatus("Błąd połączenia. Sprawdź kod i połączenie internetowe."));
-}
-function openNet(code,host){
- $("err").textContent="";
- if(location.protocol==="file:"){$("err").textContent="Multiplayer nie zadziała po otwarciu pliku z dysku. Opublikuj ARX na hostingu HTTPS i otwórz ten sam link na obu urządzeniach.";return;}
- if(!window.Peer){$("err").textContent="Nie udało się pobrać PeerJS. Sprawdź internet i odśwież stronę.";return;}
- code=String(code||"").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,8);
- if(!code){$("err").textContent="Wpisz poprawny kod pokoju.";return;}
- if(net)closeNet();
- mode="net";S=null;panes=[];dyn.clear();$("lobby").classList.remove("hide");$("lc").textContent=code.toUpperCase();$("lh").classList.toggle("hide",!host);$("lw").classList.toggle("hide",host);$("bStart").disabled=true;
- try{history.replaceState(null,"",location.pathname+location.search+"#"+code)}catch(e){location.hash=code}
- if(host){
-  const peer=new Peer(roomPeerId(code),{debug:1, config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]}});net={host:true,peer,conn:null,code,guestConnected:false,localPlayerId:"host"};myPeer="host";
-  peer.on("open",id=>{setNetStatus("Pokój gotowy. Kod: "+code.toUpperCase()+". Wyślij link znajomemu.");updateNetLobby()});
-  peer.on("connection",bindHostConnection);
-  peer.on("error",err=>{const m=err&&err.type;if(m==="unavailable-id")$("err").textContent="Ten kod jest już zajęty. Utwórz nowy pokój.";else if(m==="network")$("err").textContent="Nie można połączyć się z serwerem sygnalizacyjnym PeerJS.";else $("err").textContent="Błąd multiplayer: "+(err&&err.message||m||"nieznany");});
-  updateNetLobby();
- }else{
-  const peer=new Peer({debug:1, config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]}});net={host:false,peer,conn:null,code,guestConnected:false,localPlayerId:"guest"};myPeer="guest";
-  peer.on("open",()=>{setNetStatus("Łączenie z pokojem "+code.toUpperCase()+"…");const conn=peer.connect(roomPeerId(code),{reliable:true,serialization:"json"});bindGuestConnection(conn)});
-  peer.on("error",err=>{const m=err&&err.type;if(m==="peer-unavailable")$("err").textContent="Nie znaleziono pokoju. Sprawdź kod i upewnij się, że gospodarz ma otwartą grę.";else if(m==="network")$("err").textContent="Nie można połączyć się z serwerem PeerJS. Sprawdź internet.";else $("err").textContent="Błąd multiplayer: "+(err&&err.message||m||"nieznany");});
-  updateNetLobby();
- }
-}
-$("bCopyInvite").onclick=()=>{if(!net)return;const url=location.href.split("#")[0]+"#"+net.code;if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(()=>$("err").textContent="Link zaproszenia skopiowany!").catch(()=>$("err").textContent="Skopiuj kod: "+net.code);else $("err").textContent="Skopiuj kod: "+net.code};
-$("mNet").onclick=()=>openNet(randomRoomCode(),true);
-$("mJoin").onclick=()=>openNet($("code").value,false);
-$("bStart").onclick=()=>{
- if(!net||!net.host||!net.conn||!net.conn.open){$("err").textContent="Poczekaj, aż znajomy dołączy do pokoju.";return;}
- const list=[{name:"Gracz 1",peer:"host"},{name:"Gracz 2",peer:"guest"}];
- const bots=Math.min(+$("netB").value,2);for(let i=0;i<bots;i++)list.push({name:"Bot "+(i+1),bot:1});
- newGame(Date.now()%1e9,list);net.started=true;show();setPanes(["cur"]);sync();
-};
-const h0=(location.hash||"").slice(1);if(h0){$("code").value=h0;openNet(h0,false)}
+$('mHelp').onclick=()=>{const help=$('help');help.showModal();help.focus({preventScroll:true});help.scrollTop=0;};
 loop();
 </script></body></html>
